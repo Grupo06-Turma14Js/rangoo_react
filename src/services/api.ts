@@ -12,7 +12,7 @@
 // então armazenamos e enviamos exatamente como veio.
 // ─────────────────────────────────────────────────────────────────────────────
 
-const BASE_URL = "https://rangoo-nest.onrender.com";
+const BASE_URL = "https://rangoo-nest-da5w.onrender.com/";
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
