@@ -1,9 +1,10 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import Home from "./pages/Home";
+import Home from "./pages/home/Home";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+import PratoSmart from "./pages/pratosmart/PratoSmart";
 
 
 
@@ -24,7 +25,7 @@ function App() {
         <main className="flex-1">
           <Routes>
             <Route path="/" element={<Home />} />
-            
+            <Route path="/PratoSmart" element={<PratoSmart />} />
           </Routes>
         </main>
 
