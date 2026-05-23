@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { useRef } from "react";
-import bowlSalada from "../assets/images/BowlSalada5.png";
+import bowlSalada from "../../assets/images/BowlSalada5.png";
 
-import bebidas from "../assets/images/Bebidas.png";
-import maisPedidos from "../assets/images/Mais_pedidos.png";
-import marmitas from "../assets/images/Marmitas.png";
-import organico from "../assets/images/Organico.png";
-import sobremesa from "../assets/images/Sobremesas.png";
+import bebidas from "../../assets/images/Bebidas.png";
+import maisPedidos from "../../assets/images/Mais_pedidos.png";
+import marmitas from "../../assets/images/Marmitas.png";
+import organico from "../../assets/images/Organico.png";
+import sobremesa from "../../assets/images/Sobremesas.png";
 import {
   Leaf,
   CookingPot,

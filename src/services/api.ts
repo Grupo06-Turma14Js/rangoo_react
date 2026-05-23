@@ -1,4 +1,4 @@
-const BASE_URL = "https://rangoo-nest-da5w.onrender.com/";
+const BASE_URL = "https://rangoo-nest-da5w.onrender.com";
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -224,10 +224,10 @@ export const produtoApi = {
 
 export const session = {
   /** Salva token e dados do usuário após login bem-sucedido. */
-  save: (data: LoginResponse): void => {
-    localStorage.setItem("token", data.token);
+    save: (data: LoginResponse): void => {
+    localStorage.setItem("token", data.token);  // ← chave separada que getToken() usa
     localStorage.setItem("usuario", JSON.stringify(data));
-  },
+    },
 
   /** Remove sessão (logout). */
   clear: (): void => {

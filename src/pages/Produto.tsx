@@ -4,28 +4,14 @@ import {
   Plus,
   Tag,
   ArrowsDownUp,
+  Spinner,
 } from '@phosphor-icons/react';
-
-import { ClipLoader } from 'react-spinners';
 import { toast } from 'react-toastify';
 
 import ProductCard from '../components/Produto/Produtocard';
 
-import {
-  getProducts,
-  createProduct,
-  updateProduct,
-  deleteProduct,
-  getCategories,
-  createCategory,
-  deleteCategory,
-} from '../services/api';
-
-import type {
-    Product,
-    ProductFormData,
-    Category,
-} from '../types';
+import { produtoApi, categoriaApi, type ProdutoPayload } from '../services/api';
+import type { Product, Category, ProductFormData } from '../types';
 import ProductModal from '../components/Produto/Produtomodal';
 import CategoryModal from '../components/Produto/Categoriamodal';
 import DeleteModal from '../components/Produto/Deletarmodal';
@@ -83,12 +69,12 @@ const Products: React.FC = () => {
     try {
       const [productsRes, categoriesRes] =
         await Promise.all([
-          getProducts(),
-          getCategories(),
+          produtoApi.findAll(),
+          categoriaApi.findAll(),
         ]);
 
-      setProducts(productsRes.data);
-      setCategories(categoriesRes.data);
+      setProducts(productsRes);
+      setCategories(categoriesRes);
     } catch (error) {
       toast.error(
         'Erro ao carregar produtos e categorias.'
@@ -197,32 +183,18 @@ const Products: React.FC = () => {
           data.objetivo || null,
 
         categoria: {
-          id: Number(data.categoria),
+          id: Number(data.categoria.id),
         },
       };
 
       if (editingProduct) {
         const response =
-          await updateProduct(
-            editingProduct.id,
-            payload,
-            {
-                id: 0,
-                nome: '',
-                descricao: '',
-                preco: 0,
-                ativo: false,
-                imcMin: null,
-                imcMax: null,
-                objetivo: null,
-                categoria: { id: 0, nome: '', descricao: '' }
-            }
-          );
+          await produtoApi.update({ id: editingProduct.id, ...payload } as ProdutoPayload);
 
         setProducts((prev) =>
           prev.map((product) =>
             product.id === editingProduct.id
-              ? response.data
+              ? response
               : product
           )
         );
@@ -232,11 +204,11 @@ const Products: React.FC = () => {
         );
       } else {
         const response =
-          await createProduct(payload);
+          await produtoApi.create(payload as ProdutoPayload);
 
         setProducts((prev) => [
           ...prev,
-          response.data,
+          response,
         ]);
 
         toast.success(
@@ -262,7 +234,7 @@ const Products: React.FC = () => {
       setDeletingProductLoading(true);
 
       try {
-        await deleteProduct(
+        await produtoApi.delete(
           deletingProduct.id
         );
 
@@ -298,11 +270,11 @@ const Products: React.FC = () => {
 
       try {
         const response =
-          await createCategory(data);
+          await categoriaApi.create(data);
 
         setCategories((prev) => [
           ...prev,
-          response.data,
+          response,
         ]);
 
         toast.success(
@@ -321,7 +293,7 @@ const Products: React.FC = () => {
   const handleDeleteCategory =
     async (id: number) => {
       try {
-        await deleteCategory(id);
+        await categoriaApi.delete(id);
 
         setCategories((prev) =>
           prev.filter(
@@ -499,10 +471,7 @@ const Products: React.FC = () => {
         {/* Products */}
         {loadingProducts ? (
           <div className="flex justify-center py-24">
-            <ClipLoader
-              color="#31502A"
-              size={40}
-            />
+            <Spinner size={40} color="#31502A" className="animate-spin" />
           </div>
         ) : filteredProducts.length ===
           0 ? (
