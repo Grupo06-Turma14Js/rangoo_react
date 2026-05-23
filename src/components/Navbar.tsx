@@ -9,7 +9,8 @@ export default function Navbar() {
   const navLinks = [
     { name: "Home", path: "/" },
     { name: "Produtos", path: "/produtos" },
-    { name: "Calculadora", path: "/calculadora" },
+    { name: "Objetivos", path: "/Categorias" },
+    { name: "Prato Smart", path: "/PratoSmart" },
     { name: "Sobre Nós", path: "/sobre" },
   ];
 
