@@ -1,17 +1,3 @@
-// ─────────────────────────────────────────────────────────────────────────────
-// api.ts — Rangoo Nest
-// Base: https://rangoo-nest.onrender.com
-//
-// Endpoints públicos (sem JWT):
-//   POST /usuarios/logar
-//   POST /usuarios/cadastrar
-//
-// Todos os demais exigem: Authorization: Bearer <token>
-//
-// Atenção: o backend retorna o token já com o prefixo "Bearer ",
-// então armazenamos e enviamos exatamente como veio.
-// ─────────────────────────────────────────────────────────────────────────────
-
 const BASE_URL = "https://rangoo-nest-da5w.onrender.com/";
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────

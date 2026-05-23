@@ -55,3 +55,33 @@
   font-weight: 900;
   letter-spacing: -0.03em;
 }
+
+/* Efeito de texto vazado/outline idêntico à imagem */
+.text-outline-marquee {
+  color: transparent !important;
+  -webkit-text-stroke: 1px #2A4B2A;
+}
+
+/* Garante que a animação flua sem solavancos */
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-marquee-infinite {
+  display: flex;
+  width: max-content;
+  animation: marquee 30s linear infinite;
+}
+
+
+/* Esconde a barra de rolagem nativa mantendo a funcionalidade do scroll */
+@layer utilities {
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+  .scrollbar-none {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
