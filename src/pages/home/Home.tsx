@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import bowlSalada from "../../assets/images/BowlSalada5.png";
+import { useNavigate } from "react-router-dom";
 
 import bebidas from "../../assets/images/Bebidas.png";
 import maisPedidos from "../../assets/images/Mais_pedidos.png";
@@ -96,6 +97,9 @@ const fadeRight = (inView: boolean, delay = 0) =>
   }`;
 
 export default function Home() {
+
+  const navigate = useNavigate();
+
   const [activeCategory, setActiveCategory] = useState("Marmitas");
   const [activeFeedback, setActiveFeedback] = useState(0);
 
@@ -188,10 +192,14 @@ export default function Home() {
                 Refeições deliciosas e nutritivas, preparadas com ingredientes frescos e orgânicos para uma vida melhor.
               </p>
               <div className="flex flex-row items-center gap-4 pt-4">
-                <button className="px-8 py-3.5 bg-[#2A4B2A] hover:bg-[#1F3A1F] text-white font-bold rounded-full shadow-lg shadow-black/20 transition-all transform hover:-translate-y-0.5 whitespace-nowrap text-sm sm:text-base">
+                <button 
+                onClick={() => navigate("/produtos")}
+                className="cursor-pointer px-8 py-3.5 bg-[#2A4B2A] hover:bg-[#2a3a1f] text-white font-bold rounded-full shadow-lg shadow-black/20 transition-all transform hover:-translate-y-0.5 whitespace-nowrap text-sm sm:text-base">
                   Peça Agora
                 </button>
-                <button className="px-8 py-3.5 bg-transparent text-[#2A4B2A] font-bold rounded-full border border-[#2A4B2A] hover:bg-[#2A4B2A] hover:text-white hover:-translate-y-0.5 hover:shadow-md transition-all whitespace-nowrap text-sm sm:text-base">
+                <button 
+                onClick={() => navigate("/sobre")}
+                className="cursor-pointer px-8 py-3.5 bg-transparent text-[#2A4B2A] font-bold rounded-full border border-[#2A4B2A] hover:bg-[#2A4B2A] hover:text-white hover:-translate-y-0.5 hover:shadow-md transition-all whitespace-nowrap text-sm sm:text-base">
                   Saiba Mais
                 </button>
               </div>

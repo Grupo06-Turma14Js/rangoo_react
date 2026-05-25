@@ -33,6 +33,8 @@ function Layout() {
         <Routes>
           {/* ROTAS PÚBLICAS */}
 
+          <Route path="/" element={<Home />} />
+
           <Route path="/login" element={<Login />} />
 
           <Route path="/cadastro" element={<Cadastro />} />

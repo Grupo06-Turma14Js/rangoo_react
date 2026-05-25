@@ -116,8 +116,8 @@ export default function Navbar() {
             </button>
           ) : (
             <button
-              onClick={() => navigate("/")}
-              className={`px-9 py-2.5 rounded-full font-medium text-sm transition-all duration-200 shadow-sm ${
+              onClick={() => navigate("/login")}
+              className={`px-9 py-2.5 rounded-full font-medium text-sm transition-all duration-200 shadow-sm cursor-pointer ${
                 useWhiteText
                   ? "bg-white text-[#2A4B2A] hover:bg-gray-100"
                   : "bg-[#2A4B2A] text-white hover:bg-[#1F3A1F]"
