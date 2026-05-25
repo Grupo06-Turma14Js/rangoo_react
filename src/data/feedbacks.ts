@@ -32,7 +32,7 @@ export const FEEDBACKS_DATA: Feedback[] = [
     name: "Carlos Eduardo",
     rating: 5,
     comment:
-      "Cardápio super variado e ingredientes de primeira. Consigo manter minha dieta de forma muito prática e gostosa. O atendimento e o cuidado com a embalagem são impecáveis.",
+      "Cardápio super variado e ingredientes de primeira. Consigo manter minha dieta de forma muito prática e gostosa. A equipe e o cuidado com a embalagem são impecáveis.",
     avatar:
       "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=150&h=150&q=80",
   },
