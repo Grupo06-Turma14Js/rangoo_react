@@ -1,7 +1,5 @@
-// src/components/products/ProductModal.tsx
-
-import React, { useEffect, useState, useRef } from 'react';
-import { X, UploadSimple, Image as ImageIcon, Trash } from '@phosphor-icons/react';
+import React, { useEffect, useState } from 'react';
+import { X } from '@phosphor-icons/react';
 import type { Category, Product, ProductFormData } from '../../types';
 
 interface ProductModalProps {
@@ -29,7 +27,7 @@ type ProductModalFormState = Omit<
   imcMin: string;
   imcMax: string;
   objetivo: string;
-  foto: string; // Adicionado campo de foto (Base64 ou URL)
+  foto: string; 
 };
 
 const emptyForm: ProductModalFormState = {
@@ -40,7 +38,7 @@ const emptyForm: ProductModalFormState = {
   imcMin: '',
   imcMax: '',
   objetivo: '',
-  foto: '', // Inicializando vazio
+  foto: '',
   categoria: {
     id: 0,
   },
@@ -55,7 +53,6 @@ const ProductModal: React.FC<ProductModalProps> = ({
   loading = false,
 }) => {
   const [form, setForm] = useState<ProductModalFormState>(emptyForm);
-  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (product) {
@@ -67,7 +64,7 @@ const ProductModal: React.FC<ProductModalProps> = ({
         imcMin: product.imcMin?.toString() ?? '',
         imcMax: product.imcMax?.toString() ?? '',
         objetivo: product.objetivo ?? '',
-        foto: (product as any).foto ?? '', // Puxando a foto caso exista no produto editado
+        foto: (product as any).foto ?? '', 
         categoria: product.categoria?.id
           ? { id: product.categoria.id }
           : { id: 0 },
@@ -104,51 +101,25 @@ const ProductModal: React.FC<ProductModalProps> = ({
     }
   };
 
-  // Função para lidar com o upload da imagem e converter para Base64
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setForm((prev) => ({
-          ...prev,
-          foto: reader.result as string,
-        }));
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  // Função para remover a imagem atual
-  const handleRemoveImage = () => {
-    setForm((prev) => ({ ...prev, foto: '' }));
-    if (fileInputRef.current) {
-      fileInputRef.current.value = '';
-    }
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     const payload: ProductFormData = {
-      nome: form.nome,
-      descricao: form.descricao,
-      preco: Number(form.preco),
-      ativo: form.ativo,
-      imcMin: form.imcMin === '' ? null : Number(form.imcMin),
-      imcMax: form.imcMax === '' ? null : Number(form.imcMax),
-      objetivo:
-        form.objetivo === '' ? null : (form.objetivo as ProductFormData['objetivo']),
-      categoria: {
-        id: form.categoria.id,
-      },
-      // Aqui enviamos a foto (se o seu backend esperar outro nome, altere aqui)
-      ...(form.foto && { foto: form.foto }),
-    };
+    nome: form.nome,
+    descricao: form.descricao,
+    preco: Number(form.preco),
+    ativo: form.ativo,
+    imcMin: form.imcMin === '' ? null : Number(form.imcMin),
+    imcMax: form.imcMax === '' ? null : Number(form.imcMax),
+    objetivo: form.objetivo === '' ? null : (form.objetivo as ProductFormData['objetivo']),
+    categoria: { id: form.categoria.id },
+    foto: form.foto || null,
+  };
 
-    console.log(payload);
+  console.log('2. payload do modal:', payload); // ← e aqui
+  await onSubmit(payload);
+};
 
-    await onSubmit(payload);
   };
 
   if (!isOpen) return null;
@@ -188,59 +159,34 @@ const ProductModal: React.FC<ProductModalProps> = ({
         {/* Form */}
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
           
-          {/* Upload de Imagem */}
+          {/* URL da Imagem */}
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-1.5">
-              Imagem do Produto
+              URL da Foto (Link da Imagem)
             </label>
-            
-            <div className="flex items-center gap-4">
-              {form.foto ? (
-                <div className="relative w-24 h-24 rounded-xl border border-gray-200 overflow-hidden group">
-                  <img 
-                    src={form.foto} 
-                    alt="Preview" 
-                    className="w-full h-full object-cover"
-                  />
-                  <button
-                    type="button"
-                    onClick={handleRemoveImage}
-                    className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
-                  >
-                    <Trash size={20} className="text-white" weight="fill" />
-                  </button>
-                </div>
-              ) : (
-                <div 
-                  onClick={() => fileInputRef.current?.click()}
-                  className="w-24 h-24 rounded-xl border-2 border-dashed border-gray-300 flex flex-col items-center justify-center text-gray-400 hover:text-[#31502A] hover:border-[#31502A] hover:bg-gray-50 transition-colors cursor-pointer"
-                >
-                  <ImageIcon size={24} weight="regular" />
-                  <span className="text-[10px] font-semibold mt-1 uppercase tracking-wider">Upload</span>
-                </div>
-              )}
-              
-              <div className="flex-1">
-                <input
-                  type="file"
-                  accept="image/*"
-                  ref={fileInputRef}
-                  onChange={handleImageUpload}
-                  className="hidden"
+            <input
+              type="url"
+              name="foto"
+              value={form.foto}
+              onChange={handleChange}
+              placeholder="Cole o link da imagem aqui..."
+              className="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-gray-800 placeholder-gray-400 bg-white focus:outline-none focus:ring-2 focus:ring-[#31502A]/30 focus:border-[#31502A] text-sm"
+            />
+            {/* Pré-visualização da imagem caso o link seja inserido */}
+            {form.foto && (
+              <div className="mt-3">
+                <p className="text-xs text-gray-500 mb-1">Pré-visualização:</p>
+                <img 
+                  src={form.foto} 
+                  alt="Preview do link inserido" 
+                  className="w-24 h-24 object-cover rounded-xl border border-gray-200"
+                  onError={(e) => {
+                    // Se o link for inválido, mostra uma imagem cinza de erro
+                    (e.target as HTMLImageElement).src = 'https://via.placeholder.com/150?text=Erro';
+                  }}
                 />
-                <button
-                  type="button"
-                  onClick={() => fileInputRef.current?.click()}
-                  className="flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-200 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
-                >
-                  <UploadSimple size={16} />
-                  Escolher imagem
-                </button>
-                <p className="text-xs text-gray-400 mt-2">
-                  Formatos aceitos: JPG, PNG, WEBP. Tamanho max: 2MB.
-                </p>
               </div>
-            </div>
+            )}
           </div>
 
           {/* Nome */}

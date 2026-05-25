@@ -129,6 +129,7 @@ export interface ProdutoPayload {
   objetivo?: Objetivo | null;
   categoria: { id: number };
   usuario: { id: number };
+  foto?: string | null;
 }
 
 // ─── API — Usuário ────────────────────────────────────────────────────────────

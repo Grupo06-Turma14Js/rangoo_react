@@ -172,19 +172,16 @@ const Products: React.FC = () => {
 
     try {
       const payload = {
-        nome: data.nome,
-        descricao: data.descricao,
-        preco: data.preco,
-        ativo: data.ativo,
-        imcMin: data.imcMin,
-        imcMax: data.imcMax,
-        objetivo:
-          data.objetivo || null,
-
-        categoria: {
-          id: Number(data.categoria.id),
-        },
-      };
+      nome: data.nome,
+      descricao: data.descricao,
+      preco: data.preco,
+      ativo: data.ativo,
+      imcMin: data.imcMin,
+      imcMax: data.imcMax,
+      objetivo: data.objetivo || null,
+      categoria: { id: Number(data.categoria.id) },
+      foto: data.foto || null, // ← adicione essa linha
+    };
 
       if (editingProduct) {
         const response =
@@ -426,7 +423,7 @@ const Products: React.FC = () => {
                   )
                 }
                 placeholder="Buscar..."
-                className="pl-9 pr-4 py-2.5 rounded-xl border border-gray-200 text-sm"
+                className="pl-9 pr-4 py-2.5 rounded-xl border border-gray-200 text-black"
               />
             </div>
 
@@ -445,7 +442,7 @@ const Products: React.FC = () => {
                       .value as SortOption
                   )
                 }
-                className="pl-8 pr-4 py-2.5 rounded-xl border border-gray-200 text-sm bg-white"
+                className="pl-8 pr-4 py-2.5 rounded-xl border border-gray-200 text-black bg-white"
               >
                 <option value="name">
                   Nome

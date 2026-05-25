@@ -12,6 +12,7 @@ export type Objetivo =
   | 'sem-gluten';
 
 export interface Product {
+  foto: string | null;
   id: number;
   nome: string;
   descricao: string;
@@ -31,15 +32,13 @@ export interface ProductFormData {
   descricao: string;
   preco: number;
   ativo: boolean;
-
   imcMin: number | null;
   imcMax: number | null;
-
   objetivo: Objetivo | null;
-
   categoria: {
     id: number;
   };
+  foto?: string | null;
 }
 
 export interface CategoryFormData {
