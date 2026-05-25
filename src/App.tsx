@@ -1,9 +1,4 @@
-import {
-  BrowserRouter,
-  Routes,
-  Route,
-  useLocation,
-} from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 
 import { ToastContainer } from "react-toastify";
 
@@ -20,88 +15,41 @@ import PratoSmart from "./pages/pratosmart/PratoSmart";
 import Login from "./pages/login/Login";
 import Cadastro from "./pages/cadastro/Cadastro";
 
-import PrivateRoute from "./routes/PrivateRoute";
 
 function Layout() {
-
   const location = useLocation();
 
   // esconde navbar/footer no login e cadastro
   const hideLayout =
-    location.pathname === "/" ||
-    location.pathname === "/cadastro";
+    location.pathname === "/login" || location.pathname === "/cadastro";
 
   return (
     <div className="min-h-screen flex flex-col bg-[#050A14] text-white font-inter">
-
-      <ToastContainer
-        position="top-right"
-        autoClose={3000}
-        theme="dark"
-      />
+      <ToastContainer position="top-right" autoClose={3000} theme="dark" />
 
       {!hideLayout && <Navbar />}
 
       <main className="flex-1">
-
         <Routes>
-
           {/* ROTAS PÚBLICAS */}
 
-          <Route
-            path="/"
-            element={<Login />}
-          />
+          <Route path="/" element={<Home />} />
 
-          <Route
-            path="/cadastro"
-            element={<Cadastro />}
-          />
+          <Route path="/login" element={<Login />} />
 
-          {/* ROTAS PRIVADAS */}
+          <Route path="/cadastro" element={<Cadastro />} />
 
-          <Route
-            path="/home"
-            element={
-              <PrivateRoute>
-                <Home />
-              </PrivateRoute>
-            }
-          />
+          <Route path="/home" element={<Home />} />
 
-          <Route
-            path="/sobre"
-            element={
-              <PrivateRoute>
-                <Sobre />
-              </PrivateRoute>
-            }
-          />
+          <Route path="/sobre" element={<Sobre />} />
 
-          <Route
-            path="/produtos"
-            element={
-              <PrivateRoute>
-                <Products />
-              </PrivateRoute>
-            }
-          />
+          <Route path="/produtos" element={<Products />} />
 
-          <Route
-            path="/PratoSmart"
-            element={
-              <PrivateRoute>
-                <PratoSmart />
-              </PrivateRoute>
-            }
-          />
-
+          <Route path="/PratoSmart" element={<PratoSmart />} />
         </Routes>
-
       </main>
 
       {!hideLayout && <Footer />}
-
     </div>
   );
 }

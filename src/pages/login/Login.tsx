@@ -1,14 +1,12 @@
 import { useState } from "react";
-
-import {
-  Link,
-  useNavigate,
-} from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import {
   usuarioApi,
   session,
 } from "../../services/api";
+
+import bowlSalada from "../../assets/images/BowlSalada5.png";
 
 export default function Login() {
 
@@ -34,10 +32,8 @@ export default function Login() {
         senha,
       });
 
-      // salva sessão
       session.save(response);
 
-      // entra na aplicação
       navigate("/home");
 
     } catch (error) {
@@ -54,63 +50,82 @@ export default function Login() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#D1E2D3] px-4">
+    <div className="min-h-screen bg-[#D1E2D3] flex items-center justify-center px-6">
 
-      <form
-        onSubmit={handleSubmit}
-        className="flex flex-col gap-4 p-8 rounded-2xl shadow-xl w-full max-w-md bg-white text-black"
-      >
+      <div className="max-w-6xl w-full grid lg:grid-cols-2 gap-10 items-center">
 
-        <h1 className="text-5xl font-logo-rangoo text-[#2A4B2A] tracking-tighter text-center">
-          Login
-        </h1>
+        {/* IMAGEM */}
+        <div className="hidden lg:flex justify-center">
+          <img
+            src={bowlSalada}
+            alt="Salada Saudável Rangoo"
+            className="w-full max-w-xl object-contain drop-shadow-2xl animate-float-custom"
+          />
+        </div>
 
-        <input
-          type="email"
-          placeholder="Email"
-          value={usuario}
-          onChange={(e) => setUsuario(e.target.value)}
-          className="border border-gray-300 p-3 rounded-lg outline-none focus:ring-2 focus:ring-[#2A4B2A]"
-          required
-        />
-
-        <input
-          type="password"
-          placeholder="Senha"
-          value={senha}
-          onChange={(e) => setSenha(e.target.value)}
-          className="border border-gray-300 p-3 rounded-lg outline-none focus:ring-2 focus:ring-[#2A4B2A]"
-          required
-        />
-
-        {erro && (
-          <p className="text-red-500 text-sm text-center">
-            {erro}
-          </p>
-        )}
-
-        <button
-          type="submit"
-          disabled={loading}
-          className="bg-[#2A4B2A] hover:bg-[#1F3A1F] text-white p-3 rounded-lg font-medium transition-all duration-200"
+        {/* FORM */}
+        <form
+          onSubmit={handleSubmit}
+          className="flex flex-col gap-4 p-8 rounded-3xl shadow-2xl w-full max-w-md bg-white text-black mx-auto"
         >
-          {loading ? "Entrando..." : "Entrar"}
-        </button>
 
-        <p className="text-center text-sm text-gray-700">
+          <h1 className="text-5xl font-logo-rangoo text-[#2A4B2A] tracking-tighter text-center">
+            Rangoo
+          </h1>
 
-          Não possui conta?
+          <p className="text-center text-gray-500 mb-2">
+            Entre na sua conta
+          </p>
 
-          <Link
-            to="/cadastro"
-            className="text-[#2A4B2A] font-semibold ml-1 hover:underline"
+          <input
+            type="email"
+            placeholder="Email"
+            value={usuario}
+            onChange={(e) => setUsuario(e.target.value)}
+            className="border border-gray-300 p-3 rounded-xl outline-none focus:ring-2 focus:ring-[#2A4B2A]"
+            required
+          />
+
+          <input
+            type="password"
+            placeholder="Senha"
+            value={senha}
+            onChange={(e) => setSenha(e.target.value)}
+            className="border border-gray-300 p-3 rounded-xl outline-none focus:ring-2 focus:ring-[#2A4B2A]"
+            required
+          />
+
+          {erro && (
+            <p className="text-red-500 text-sm text-center">
+              {erro}
+            </p>
+          )}
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="bg-[#2A4B2A] hover:bg-[#1F3A1F] text-white p-3 rounded-xl font-medium transition-all duration-200 cursor-pointer"
           >
-            Criar conta
-          </Link>
+            {loading ? "Entrando..." : "Entrar"}
+          </button>
 
-        </p>
+          <p className="text-center text-sm text-gray-700">
 
-      </form>
+            Não possui conta?
+
+            <Link
+              to="/cadastro"
+              className="text-[#2A4B2A] font-semibold ml-1 hover:underline"
+            >
+              Criar conta
+            </Link>
+
+          </p>
+
+        </form>
+
+      </div>
+
     </div>
   );
 }
