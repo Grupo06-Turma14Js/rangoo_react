@@ -4,6 +4,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import Home from "./pages/home/Home";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+import Sobre from "./pages/Sobre";
+
 import PratoSmart from "./pages/pratosmart/PratoSmart";
 import Products from "./pages/Produto";
 
@@ -25,6 +27,8 @@ function App() {
         <main className="flex-1">
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/sobre" element={<Sobre />} />
+            
             <Route path="/produtos" element={<Products />} />
             <Route path="/PratoSmart" element={<PratoSmart />} />
           </Routes>
