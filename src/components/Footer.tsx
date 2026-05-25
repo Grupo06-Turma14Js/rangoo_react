@@ -26,7 +26,7 @@ export default function Footer() {
               Links
             </h4>
             <ul className="space-y-2">
-              {['Home', 'Produtos', 'Categorias', 'Calculadora', 'Sobre Nós'].map((item) => (
+              {['Home', 'Produtos', 'Categorias', 'Prato Smart', 'Sobre Nós'].map((item) => (
                 <li key={item}>
                   <a href="#" className="text-[#C2D4C4] hover:text-white text-sm transition-colors duration-150">
                     {item}
