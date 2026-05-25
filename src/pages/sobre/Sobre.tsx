@@ -72,7 +72,7 @@ function Sobre() {
   const steps     = useStaggerInView(3);
 
   return (
-    <div className="w-full bg-[#D1E2D3] pt-24 pb-0">
+    <div className="w-full bg-[#D1E2D3] pt-24 pb-0 overflow-x-hidden">
 
       {/* ── HERO ── */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 md:pt-12">
@@ -118,11 +118,11 @@ function Sobre() {
               heroImage.inView ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-12'
             }`}
           >
-            <div className="relative w-full max-w-sm sm:max-w-md aspect-square flex items-center justify-center overflow-visible p-8">
+            <div className="relative w-full max-w-md md:max-w-lg aspect-square flex items-center justify-center overflow-hidden p-2">
               <img
                 src="https://ik.imagekit.io/yytwlza66/bowl_sobre_oficial_semfundo.png"
                 alt="Bowl saudável Rangoo"
-                className="w-full h-full object-contain filter drop-shadow-[0_20px_35px_rgba(0,0,0,0.15)] animate-[spin_30s_linear_infinite] scale-130 hover:scale-140 transition-transform duration-500 ease-out cursor-pointer"
+                className="w-full h-full object-cover rounded-full filter drop-shadow-[0_20px_35px_rgba(0,0,0,0.15)] animate-[spin_30s_linear_infinite] hover:scale-105 transition-transform duration-500 ease-out cursor-pointer"
               />
             </div>
           </div>
@@ -149,6 +149,8 @@ function Sobre() {
 
       {/* ── NOSSA HISTÓRIA ── */}
       <section id="secao-sobre" className="w-full bg-[#FAF9F5] py-16 scroll-smooth">
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
 
@@ -388,6 +390,7 @@ function Sobre() {
             </div>
           </div>
 
+        </div>
         </div>
       </section>
 
