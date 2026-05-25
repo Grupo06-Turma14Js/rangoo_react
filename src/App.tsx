@@ -13,8 +13,8 @@ import Home from "./pages/home/Home";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 
-import Sobre from "./pages/Sobre";
-import Products from "./pages/Produto";
+import Sobre from "./pages/Sobre/Sobre";
+import Products from "./pages/Produtos/Produto";
 import PratoSmart from "./pages/pratosmart/PratoSmart";
 
 import Login from "./pages/login/Login";

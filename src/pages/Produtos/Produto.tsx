@@ -2,19 +2,18 @@ import React, { useEffect, useMemo, useState } from 'react';
 import {
   MagnifyingGlass,
   Plus,
-  Tag,
   ArrowsDownUp,
   Spinner,
 } from '@phosphor-icons/react';
 import { toast } from 'react-toastify';
 
-import ProductCard from '../components/Produto/Produtocard';
+import ProductCard from '../../components/Produto/Produtocard';
 
-import { produtoApi, categoriaApi, type ProdutoPayload } from '../services/api';
-import type { Product, Category, ProductFormData } from '../types';
-import ProductModal from '../components/Produto/Produtomodal';
-import CategoryModal from '../components/Produto/Categoriamodal';
-import DeleteModal from '../components/Produto/Deletarmodal';
+import { produtoApi, categoriaApi, type ProdutoPayload } from '../../services/api';
+import type { Product, Category, ProductFormData } from '../../types';
+import ProductModal from '../../components/Produto/Produtomodal';
+import CategoryModal from '../../components/Produto/Categoriamodal';
+import DeleteModal from '../../components/Produto/Deletarmodal';
 
 type SortOption =
   | 'name'
@@ -315,49 +314,45 @@ const Products: React.FC = () => {
   return (
     <div className="min-h-screen bg-[#F5F5F0] font-lato">
       {/* Header */}
-      <div className="bg-[#31502A]">
-        <div className="max-w-7xl mx-auto px-6 py-12">
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-            <div>
-              <p className="text-white/50 text-xs font-semibold tracking-widest uppercase mb-2">
-                PRODUTOS
-              </p>
+      <div 
+        className="relative w-full pt-32 pb-20 md:pt-25 md:pb-25 bg-cover bg-center bg-no-repeat"
+        style={{ 
+          // Link de exemplo para os ingredientes no fundo. Você pode trocar por uma imagem local se preferir!
+          backgroundImage: "url('https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=2053&auto=format&fit=crop')" 
+        }}
+      >
+        {/* Overlay escuro para dar contraste ao texto e deixar premium */}
+        <div className="absolute inset-0 bg-black/60 z-0"></div>
 
-              <h1 className="text-4xl md:text-5xl font-black text-white">
-                Nossas refeições saudáveis
-              </h1>
+        <div className="relative z-10 max-w-7xl mx-auto px-6">
+          <div className="max-w-2xl">
+            <p className="text-white/80 text-xs font-bold tracking-widest uppercase mb-2">
+              PRODUTOS
+            </p>
 
-              <p className="text-white/60 mt-2 text-sm max-w-lg">
-                Explore nossos produtos saudáveis.
-              </p>
-            </div>
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-white tracking-tight mb-4">
+              Nossas refeições saudáveis
+            </h1>
 
-            <div className="flex gap-3">
+            <p className="text-white/80 text-sm md:text-base max-w-lg font-medium mb-8">
+              Explore nosso cardápio completo de refeições nutritivas, elaboradas por chefs e nutricionistas para seu bem-estar.
+            </p>
+
+            {/* Botões - agora alinhados à esquerda abaixo do texto */}
+            <div className="flex flex-wrap gap-4">
               <button
-                onClick={
-                  handleOpenCreate
-                }
-                className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white text-[#31502A] text-sm font-bold shadow-sm hover:bg-[#31502A] hover:text-white hover:scale-105 hover:shadow-lg transition-all duration-300 active:scale-95"
+                onClick={handleOpenCreate}
+                className="flex items-center gap-2 px-6 py-3 rounded-full bg-white text-black text-sm font-bold shadow-sm hover:scale-105 transition-transform duration-300"
               >
-                <Plus
-                  size={18}
-                  weight="bold"
-                />
+                <Plus size={16} weight="bold" />
                 Novo Produto
               </button>
 
               <button
-                onClick={() =>
-                  setCategoryModalOpen(
-                    true
-                  )
-                }
-                className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#31502A] border border-white/20 text-white text-sm font-bold hover:bg-white hover:text-[#31502A] hover:border-white hover:scale-105 hover:shadow-lg transition-all duration-300 active:scale-95"
+                onClick={() => setCategoryModalOpen(true)}
+                className="flex items-center gap-2 px-6 py-3 rounded-full bg-transparent border border-white text-white text-sm font-bold hover:bg-white/10 hover:scale-105 transition-transform duration-300"
               >
-                <Tag
-                  size={18}
-                  weight="bold"
-                />
+                <Plus size={16} weight="bold" />
                 Categoria
               </button>
             </div>
