@@ -72,10 +72,10 @@ function Sobre() {
   const steps     = useStaggerInView(3);
 
   return (
-    <div className="w-full bg-[#F8F6F1] text-[#142C14] pt-28 pb-0 font-sans">
+    <div className="w-full bg-[#D1E2D3] pt-24 pb-0">
 
       {/* ── HERO ── */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 md:pt-12 pb-12">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 md:pt-12">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
 
           {/* Texto */}
@@ -85,25 +85,26 @@ function Sobre() {
               heroText.inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
             }`}
           >
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-logo-rangoo text-[#2D5128] leading-[1.15]">
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-sans font-black text-[#2A4B2A] uppercase leading-[1.15]">
               Alimentação saudável <br />
-              deveria ser simples.
+              deveria ser simples
             </h1>
 
-            <p className="text-[#2D5128]/90 text-base sm:text-lg leading-relaxed max-w-xl mx-auto lg:mx-0">
+            <p className="text-[#2A4B2A]/80 text-base sm:text-lg font-medium leading-relaxed max-w-xl mx-auto lg:mx-0">
               A Rangoo foi criada para transformar a alimentação saudável em algo prático, personalizado e delicioso para o dia a dia.
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-4">
               <a
                 href="#secao-sobre"
-                className="px-8 py-3.5 bg-[#2A4B2A] hover:bg-[#1F3A1F] text-white font-bold rounded-full shadow-lg shadow-black/20 transition-all duration-200 transform hover:-translate-y-0.5 hover:shadow-xl whitespace-nowrap text-sm sm:text-base active:scale-95"
+                className="cursor-pointer px-8 py-3.5 bg-[#2A4B2A] hover:bg-[#2a3a1f] text-white font-bold rounded-full shadow-lg shadow-black/20 transition-all transform hover:-translate-y-0.5 whitespace-nowrap text-sm sm:text-base text-center w-full sm:w-auto"
               >
                 Nosso Projeto
               </a>
+
               <Link
                 to="/produtos"
-                className="px-8 py-3.5 bg-transparent text-[#2A4B2A] font-bold rounded-full border border-[#2A4B2A] hover:bg-[#2A4B2A] hover:text-white hover:-translate-y-0.5 hover:shadow-md transition-all duration-200 whitespace-nowrap text-sm sm:text-base active:scale-95"
+                className="cursor-pointer px-8 py-3.5 bg-transparent text-[#2A4B2A] font-bold rounded-full border border-[#2A4B2A] hover:bg-[#2A4B2A] hover:text-white hover:-translate-y-0.5 hover:shadow-md transition-all whitespace-nowrap text-sm sm:text-base text-center w-full sm:w-auto"
               >
                 Produtos
               </Link>
@@ -113,19 +114,16 @@ function Sobre() {
           {/* Imagem hero */}
           <div
             ref={heroImage.ref as React.RefObject<HTMLDivElement>}
-            className={`lg:col-span-5 flex justify-center pt-6 lg:pt-0 transition-all duration-800 ease-out ${
+            className={`lg:col-span-5 flex items-center justify-center pt-6 lg:pt-0 pb-6 transition-all duration-800 ease-out ${
               heroImage.inView ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-12'
             }`}
           >
-            <div className="relative w-full max-w-sm sm:max-w-md aspect-square rotate-2 group">
-              <div className="absolute inset-0 bg-[#A8B291]/50 rounded-[2.5rem] translate-x-4 translate-y-4 shadow-md transition-transform duration-500 group-hover:translate-x-6 group-hover:translate-y-6"></div>
-              <div className="absolute inset-0 bg-white p-1 rounded-[2.5rem] shadow-xl overflow-hidden transition-transform duration-500 group-hover:-rotate-1 group-hover:scale-[1.02]">
-                <img
-                  src="https://ik.imagekit.io/yytwlza66/rangoo_sobre.png"
-                  alt="Bowl saudável Rangoo"
-                  className="rounded-[2.2rem] object-cover w-full h-full transition-transform duration-700 group-hover:scale-105"
-                />
-              </div>
+            <div className="relative w-full max-w-sm sm:max-w-md aspect-square flex items-center justify-center overflow-visible p-8">
+              <img
+                src="https://ik.imagekit.io/yytwlza66/bowl_sobre_oficial_semfundo.png"
+                alt="Bowl saudável Rangoo"
+                className="w-full h-full object-contain filter drop-shadow-[0_20px_35px_rgba(0,0,0,0.15)] animate-[spin_30s_linear_infinite] scale-130 hover:scale-140 transition-transform duration-500 ease-out cursor-pointer"
+              />
             </div>
           </div>
 
@@ -150,7 +148,7 @@ function Sobre() {
       </div>
 
       {/* ── NOSSA HISTÓRIA ── */}
-      <section id="secao-sobre" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 scroll-smooth">
+      <section id="secao-sobre" className="w-full bg-[#FAF9F5] py-16 scroll-smooth">
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
 
@@ -170,8 +168,8 @@ function Sobre() {
 
               {/* Floating badge */}
               <div className="absolute bottom-6 right-4 sm:-right-4 bg-white/95 backdrop-blur-xs px-4 py-2.5 rounded-xl shadow-md border border-slate-100 flex items-center gap-2 transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5 cursor-default">
-                <Heart size={16} weight="fill" className="text-[#2D5128] animate-pulse shrink-0" />
-                <span className="text-xs font-bold text-[#2D5128]">Feito com Amor & Cuidado</span>
+                <Heart size={16} weight="fill" className="text-[#2A4B2A] animate-pulse shrink-0" />
+                <span className="text-xs font-bold text-[#2A4B2A]">Feito com Amor & Cuidado</span>
               </div>
             </div>
           </div>
@@ -184,21 +182,23 @@ function Sobre() {
             }`}
           >
             <div className="space-y-1">
-              <span className="inline-block px-4 py-1.5 bg-[#2D5128]/10 text-[#2D5128] text-xs font-bold uppercase tracking-wider rounded-full">
-                Nossa História
-              </span>
-              <h2 className="text-3xl sm:text-4xl font-logo-rangoo text-[#2D5128]">Por que criamos a Rangoo?</h2>
-            </div>
+            <span className="text-xs font-black text-[#2A4B2A]/80 tracking-[0.2em] uppercase rounded-full mb-1">
+            Nossa História
+          </span>
+            <h2 className="text-4xl lg:text-5xl font-logo-rangoo text-[#2A4B2A] leading-tight mb-2">
+              Por que criamos a Rangoo?
+            </h2>
+          </div>
 
-            <div className="text-[#142C14]/80 text-sm sm:text-base leading-relaxed space-y-4">
+            <div className="text-[#64748B] text-base lg:text-lg leading-relaxed space-y-6 max-w-2xl">
               <p>
-                Todos conhecemos a sensação: dias longos, listas intermináveis de tarefas, e a pergunta constante:{' '}
-                <strong className="text-[#142C14]">o que vou comer?</strong>
+                Todos conhecemos a sensação: dias longos, listas intermináveis de tarefas, e a pergunta constante:
+                <strong className="text-[#0F172A] font-extrabold ml-1.5">o que vou comer?</strong>
               </p>
               <p>
                 A rotina moderna faz a alimentação saudável parecer um luxo em vez de uma parte natural da vida. Vimos amigos, familiares e nós mesmos escolhendo a conveniência em vez da nutrição, não porque não nos importamos, mas porque as opções saudáveis eram complicadas demais, lentas demais ou simplesmente não projetadas para a vida real.
               </p>
-              <p className="font-semibold text-[#142C14]">
+              <p className="text-[#0F172A] font-semibold">
                 A Rangoo nasceu de uma crença simples: todos merecem comer bem sem sacrificar o tempo ou o sabor.
               </p>
               <p>
@@ -207,12 +207,12 @@ function Sobre() {
             </div>
 
             <div className="flex items-center gap-3 pt-4 group cursor-default w-fit">
-              <div className="w-10 h-10 rounded-full bg-[#2D5128] flex items-center justify-center text-white shadow-sm transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6">
+              <div className="w-10 h-10 rounded-full bg-[#2A4B2A] flex items-center justify-center text-white shadow-sm transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6">
                 <Leaf size={20} weight="fill" />
               </div>
               <div>
-                <p className="text-sm font-bold text-[#142C14]">100% Natural</p>
-                <p className="text-xs text-[#142C14]/70">Sem conservantes, sem atalhos.</p>
+                <p className="text-sm font-bold text-[#0F172A]">100% Natural</p>
+                <p className="text-xs text-[#64748B]">Sem conservantes, sem atalhos.</p>
               </div>
             </div>
           </div>
@@ -228,11 +228,11 @@ function Sobre() {
               inovacaoHeader.inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
             }`}
           >
-            <span className="inline-block px-4 py-1.5 bg-[#2D5128]/10 text-[#2D5128] text-xs font-bold uppercase tracking-wider rounded-full">
+            <span className="text-xs font-black text-[#2A4B2A]/80 tracking-[0.2em] uppercase rounded-full mb-1">
               Inovação
             </span>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-logo-rangoo text-[#2D5128] leading-tight">
-              Tecnologia que entende <br /> sua rotina.
+            <h2 className="text-4xl lg:text-5xl font-logo-rangoo text-[#2A4B2A] leading-tight mb-2">
+              Tecnologia que entende <br /> sua rotina
             </h2>
           </div>
 
@@ -244,40 +244,39 @@ function Sobre() {
               className={`lg:col-span-5 flex justify-center relative transition-all duration-800 ease-out ${
                 inovacaoLeft.inView ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-14'
               }`}
-            >
-              <div className="relative bg-white p-6 sm:p-10 rounded-[2.5rem] shadow-xl border border-slate-200/30 max-w-sm sm:max-w-md w-full aspect-square flex items-center justify-center overflow-visible group transition-shadow duration-300 hover:shadow-2xl">
+            ><div className="relative bg-white p-6 sm:p-10 rounded-[2.5rem] shadow-xl border border-slate-100 max-w-sm sm:max-w-md w-full aspect-square flex items-center justify-center overflow-visible group transition-all duration-300 hover:shadow-2xl hover:border-[#2A4B2A]/20">
 
                 <Link
-                  to="/calculadora"
+                  to="/PratoSmart"
                   className="absolute inset-0 w-full h-full cursor-pointer z-10 block rounded-[2.6rem]"
                   aria-label="Ir para Calculadora IMC"
                 >
-                  <img
-                    src="https://ik.imagekit.io/yytwlza66/imagem_calculadora%20(1).png"
-                    alt="Interface do Aplicativo Rangoo"
-                    className="w-full h-full object-contain p-1 transition-transform duration-500 group-hover:scale-[1.03]"
-                  />
+                <img
+                  src="https://ik.imagekit.io/yytwlza66/imagem_calculadora%20(1).png"
+                  alt="Interface do Aplicativo Rangoo"
+                  className="w-full h-full object-contain p-1 transition-transform duration-500 ease-out group-hover:scale-102"
+                />
                 </Link>
 
                 {/* Floating tag 1 */}
                 <div className="absolute top-12 -right-4 bg-white px-3 py-2 rounded-2xl shadow-md border border-slate-100/80 flex items-center gap-2.5 z-20 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg cursor-default">
-                  <div className="w-8 h-8 rounded-xl bg-[#E2F0D9] flex items-center justify-center text-[#2D5128]">
+                  <div className="w-8 h-8 rounded-xl bg-[#E2F0D9] flex items-center justify-center text-[#2A4B2A]">
                     <Heart size={16} weight="fill" />
                   </div>
                   <div className="text-left">
                     <p className="text-[9px] text-slate-400 font-bold uppercase tracking-wider leading-none">Frequência Cardíaca</p>
-                    <p className="text-xs font-bold text-slate-700 mt-0.5">72 bpm</p>
+                    <p className="text-xs font-bold text-[#0F172A] mt-0.5">72 bpm</p>
                   </div>
                 </div>
 
                 {/* Floating tag 2 */}
                 <div className="absolute bottom-16 -left-6 bg-white px-3 py-2 rounded-2xl shadow-md border border-slate-100/80 flex items-center gap-2.5 z-20 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg cursor-default">
-                  <div className="w-8 h-8 rounded-xl bg-[#E2F0D9] flex items-center justify-center text-[#2D5128]">
+                  <div className="w-8 h-8 rounded-xl bg-[#E2F0D9] flex items-center justify-center text-[#2A4B2A]">
                     <Leaf size={16} weight="fill" />
                   </div>
                   <div className="text-left">
                     <p className="text-[9px] text-slate-400 font-bold uppercase tracking-wider leading-none">Calorias</p>
-                    <p className="text-xs font-bold text-slate-700 mt-0.5">1.850</p>
+                    <p className="text-xs font-bold text-[#0F172A] mt-0.5">1.850</p>
                   </div>
                 </div>
               </div>
@@ -290,11 +289,10 @@ function Sobre() {
                 inovacaoRight.inView ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-14'
               }`}
             >
-              <p className="text-[#142C14]/80 text-sm sm:text-base leading-relaxed mb-4">
-                A Rangoo vai além da simples entrega de refeições. Nosso sistema inteligente de recomendação aprende suas preferências, objetivos e rotina diária para sugerir refeições que fazem sentido para{' '}
-                <strong className="text-[#142C14]">você</strong>. Calcule seu IMC, defina seus objetivos de bem-estar e deixe nosso algoritmo fazer o resto.
+              <p className="text-[#64748B] text-base lg:text-lg leading-relaxed max-w-xl">
+                A Rangoo vai além da simples entrega de refeições. Nosso sistema inteligente de recomendação aprende suas preferências, objetivos e rotina diária para sugerir refeições que fazem sentido para <strong className="text-[#0F172A]">você</strong>. Calcule seu IMC, defina seus objetivos de bem-estar e deixe nosso algoritmo fazer o resto.
               </p>
-
+              
               {[
                 {
                   Icon: Calculator,
@@ -315,17 +313,21 @@ function Sobre() {
                 <div
                   key={i}
                   ref={inovCards.setRef(i) as React.RefCallback<HTMLDivElement>}
-                  className={`bg-white p-5 rounded-2xl border border-slate-100 flex gap-4 items-start cursor-default
-                    transition-all ease-out hover:shadow-lg hover:-translate-y-0.5 hover:border-[#2D5128]/20
-                    ${inovCards.visibleSet.has(i) ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-8'}`}
+                  className={`bg-white p-5 rounded-2xl border border-slate-100 flex gap-5 items-start cursor-default max-w-xl
+                  transition-all ease-out hover:shadow-lg hover:-translate-y-0.5 hover:border-[#2A4B2A]/20
+                  ${inovCards.visibleSet.has(i) ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-8'}`}
                   style={{ transitionDelay: `${i * 130}ms`, transitionDuration: '600ms' }}
                 >
-                  <div className="w-10 h-10 rounded-xl bg-[#FAF7F0] border border-slate-200/60 flex items-center justify-center text-[#2D5128] shrink-0 transition-all duration-300 group-hover:bg-[#2D5128] group-hover:text-white">
+                  <div className="w-10 h-10 rounded-xl bg-[#FAF7F0] border border-slate-200/60 flex items-center justify-center text-[#2A4B2A] shrink-0 transition-all duration-300 group-hover:bg-[#2A4B2A] group-hover:text-white">
                     <Icon size={22} weight="regular" />
                   </div>
-                  <div className="space-y-0.5">
-                    <h3 className="text-sm sm:text-base font-bold text-[#142C14]">{title}</h3>
-                    <p className="text-xs sm:text-sm text-[#142C14]/70 leading-relaxed">{desc}</p>
+                  <div className="space-y-1">
+                    <h4 className="text-lg font-bold text-[#0F172A]">
+                      {title}
+                    </h4>
+                    <p className="text-sm text-[#64748B] leading-relaxed">
+                      {desc}
+                    </p>
                   </div>
                 </div>
               ))}
@@ -343,17 +345,17 @@ function Sobre() {
               comoHeader.inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
             }`}
           >
-            <span className="inline-block px-4 py-1.5 bg-[#2D5128]/10 text-[#2D5128] text-xs font-bold uppercase tracking-wider rounded-full">
+            <span className="text-xs font-black text-[#2A4B2A]/80 tracking-[0.2em] uppercase rounded-full mb-1">
               Como Funciona
             </span>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-logo-rangoo text-[#2D5128] leading-tight">
+            <h2 className="text-4xl lg:text-5xl font-logo-rangoo text-[#2A4B2A] leading-tight mb-2">
               Três passos simples para o bem-estar
             </h2>
           </div>
 
           {/* Steps — stagger */}
           <div className="relative max-w-5xl mx-auto">
-            <div className="hidden lg:block absolute top-7 left-[12%] right-[12%] h-0.5 bg-[#2D5128]/10 z-0"></div>
+            <div className="hidden lg:block absolute top-7 left-[12%] right-[12%] h-0.5 bg-[#2A4B2A]/10 z-0"></div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 text-center relative z-10">
               {[
@@ -370,16 +372,16 @@ function Sobre() {
                   style={{ transitionDelay: `${i * 150}ms`, transitionDuration: '650ms' }}
                 >
                   <div className="relative flex items-center justify-center">
-                    <div className="w-14 h-14 rounded-full bg-white shadow-md border border-slate-100 flex items-center justify-center text-[#2D5128] transition-all duration-300 group-hover:bg-[#2D5128] group-hover:text-white group-hover:scale-110 group-hover:shadow-lg group-hover:shadow-[#2D5128]/20">
+                    <div className="w-14 h-14 rounded-full bg-white shadow-md border border-slate-100 flex items-center justify-center text-[#2A4B2A] transition-all duration-300 group-hover:bg-[#2A4B2A] group-hover:text-white group-hover:scale-110 group-hover:shadow-lg group-hover:shadow-[#2A4B2A]/20">
                       <Icon size={24} />
                     </div>
-                    <span className="absolute -top-1 -right-1 w-6 h-6 rounded-full bg-[#2D5128] text-white text-xs font-bold flex items-center justify-center shadow-xs transition-transform duration-300 group-hover:scale-110">
+                    <span className="absolute -top-1 -right-1 w-6 h-6 rounded-full bg-[#2A4B2A] text-white text-xs font-bold flex items-center justify-center shadow-xs transition-transform duration-300 group-hover:scale-110">
                       {i + 1}
                     </span>
                   </div>
                   <div className="space-y-1 max-w-xs">
-                    <h3 className="text-base font-bold text-[#142C14] transition-colors duration-200 group-hover:text-[#2D5128]">{label}</h3>
-                    <p className="text-xs sm:text-sm text-[#142C14]/70 leading-relaxed">{desc}</p>
+                    <h3 className="text-sm sm:text-base font-bold text-[#0F172A] transition-colors duration-200 group-hover:text-[#2A4B2A]">{label}</h3>
+                    <p className="text-xs sm:text-sm text-[#64748B] leading-relaxed">{desc}</p>
                   </div>
                 </div>
               ))}
@@ -405,16 +407,16 @@ function Sobre() {
           }`}
         >
           <div className="flex justify-center">
-            <span className="px-5 py-1.5 bg-white/10 backdrop-blur-md border border-white/20 text-white text-xs font-bold uppercase tracking-widest rounded-full shadow-xs hover:bg-white/20 transition-colors duration-200 cursor-default">
+            <span className="text-xs font-black text-white tracking-[0.2em] uppercase rounded-full mb-1">
               Nossa Filosofia
             </span>
           </div>
 
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-logo-rangoo font-bold tracking-tight leading-tight max-w-3xl mx-auto">
+          <h2 className="text-4xl lg:text-6xl font-black text-white leading-tight mt-2">
             "Pequenas escolhas saudáveis <br /> criam rotinas melhores."
           </h2>
 
-          <p className="text-white/80 text-sm sm:text-base lg:text-lg leading-relaxed max-w-2xl mx-auto font-sans">
+          <p className="text-white italic text-lg leading-relaxed max-w-2xl text-center mx-auto">
             Cada refeição é uma oportunidade de nutrir seu corpo e mente. Na Rangoo, acreditamos que o bem-estar não é um destino, mas uma coleção de escolhas conscientes feitas todos os dias.
           </p>
 
@@ -422,11 +424,11 @@ function Sobre() {
           <div className="flex flex-wrap items-center justify-center gap-4 pt-4">
             {['Alimentação Consciente', 'Nutrição Equilibrada', 'Bem-Estar Diário'].map((tag, i) => (
               <span
-                key={i}
-                className="px-5 py-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-full text-xs sm:text-sm font-medium tracking-wide cursor-default transition-all duration-200 hover:bg-white/25 hover:border-white/40 hover:-translate-y-0.5 hover:shadow-md"
-              >
-                {tag}
-              </span>
+              key={i}
+              className="inline-block px-5 py-2 bg-white text-xs font-black text-[#2A4B2A] tracking-widest rounded-full cursor-default shadow-sm transition-all duration-300 hover:scale-105 hover:shadow-md"
+            >
+              {tag}
+            </span>
             ))}
           </div>
         </div>

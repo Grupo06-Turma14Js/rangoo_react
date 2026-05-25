@@ -8,7 +8,7 @@ import Home from "./pages/home/Home";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 
-import Sobre from "./pages/Sobre/Sobre";
+import Sobre from "./pages/sobre/Sobre";
 import Products from "./pages/Produtos/Produto";
 import PratoSmart from "./pages/pratosmart/PratoSmart";
 
