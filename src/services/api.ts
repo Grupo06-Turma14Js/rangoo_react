@@ -1,4 +1,9 @@
-const BASE_URL = "https://rangoo-nest-da5w.onrender.com";
+import axios from "axios";
+
+const API_URL = import.meta.env.VITE_API_URL;
+export const api = axios.create({
+  baseURL: API_URL,
+})
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -21,7 +26,7 @@ async function http<T>(
   body?: unknown,
   auth = true
 ): Promise<T> {
-  const res = await fetch(`${BASE_URL}${path}`, {
+  const res = await fetch(`${API_URL}${path}`, {
     method,
     headers: buildHeaders(auth),
     ...(body !== undefined ? { body: JSON.stringify(body) } : {}),
