@@ -213,7 +213,7 @@ https://github.com/Grupo06-Turma14Js/rangoo_nest
 ## 🌐 Deploy Frontend
 
 ```txt
-[ PREENCHER ]
+https://rangoo-react-acdp.vercel.app
 ```
 
 ---
