@@ -61,8 +61,8 @@ const ProductModal: React.FC<ProductModalProps> = ({
         descricao: product.descricao,
         preco: product.preco.toString(),
         ativo: product.ativo,
-        imcMin: product.imcMin?.toString() ?? '',
-        imcMax: product.imcMax?.toString() ?? '',
+        imcMin: product.imcMin != null ? String(Number(product.imcMin)) : '',
+        imcMax: product.imcMax != null ? String(Number(product.imcMax)) : '',
         objetivo: product.objetivo ?? '',
         foto: (product as any).foto ?? '', 
         categoria: product.categoria?.id

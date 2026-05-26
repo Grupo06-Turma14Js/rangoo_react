@@ -19,14 +19,22 @@ function calcularIMC(peso: number, altura: number): IMCResult {
     return { valor: imc, classificacao: "Obesidade grau II+", dica: "Priorize refeições ricas em fibras e proteína magra. Nossas opções especializadas podem ser um ótimo ponto de partida." };
 }
 
-const OBJETIVOS: { id: Objetivo; label: string; emoji: string }[] = [
+const TODOS_OBJETIVOS: { id: Objetivo; label: string; emoji: string }[] = [
     { id: "emagrecimento", label: "Emagrecimento",  emoji: "🔥" },
     { id: "ganho-massa",   label: "Ganho de massa", emoji: "💪" },
-    { id: "vegetariano", label: "Vegetariano", emoji: "🥦" },
+    { id: "vegetariano",   label: "Vegetariano",    emoji: "🥦" },
     { id: "diabetico",     label: "Diabético",       emoji: "🩺" },
     { id: "sem-lactose",   label: "Sem lactose",     emoji: "🥛" },
     { id: "sem-gluten",    label: "Sem glúten",      emoji: "🌾" },
 ];
+
+function getObjetivosDisponiveis(imc: number) {
+    return TODOS_OBJETIVOS.filter((obj) => {
+        if (obj.id === "emagrecimento") return imc >= 25;
+        if (obj.id === "ganho-massa")   return imc < 25;
+        return true;
+    });
+}
 
 const VISIBLE = 4;
 
@@ -91,9 +99,6 @@ export default function PratoSmart() {
                             className="bg-[#2d5a27] text-white text-sm font-semibold px-6 py-3 rounded-full hover:bg-[#3d7535] transition"
                         >
                             Calcule IMC
-                        </button>
-                        <button className="border border-[#2d5a27] text-[#2d5a27] text-sm font-semibold px-6 py-3 rounded-full hover:bg-[#e8ede4] transition">
-                            Saiba Mais
                         </button>
                     </div>
                 </div>
@@ -187,7 +192,7 @@ export default function PratoSmart() {
                         <div className="border-t border-[#e8ede4] pt-6">
                             <p className="text-sm font-semibold text-[#1a1a1a] mb-4">Qual é o seu objetivo?</p>
                             <div className="grid grid-cols-2 gap-2">
-                                {OBJETIVOS.map((obj) => (
+                                {resultado && getObjetivosDisponiveis(resultado.valor).map((obj) => (
                                     <button
                                         key={obj.id}
                                         onClick={() => handleObjetivo(obj.id)}

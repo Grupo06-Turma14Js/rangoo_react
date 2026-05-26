@@ -26,11 +26,19 @@ export default function Footer() {
               Links
             </h4>
             <ul className="space-y-2">
-              {['Home', 'Produtos', 'Categorias', 'Prato Smart', 'Sobre Nós'].map((item) => (
-                <li key={item}>
-                  <a href="#" className="text-[#C2D4C4] hover:text-white text-sm transition-colors duration-150">
-                    {item}
-                  </a>
+              {[
+                { label: 'Home',        path: '/'           },
+                { label: 'Produtos',    path: '/produtos'   },
+                { label: 'Prato Smart', path: '/PratoSmart' },
+                { label: 'Sobre Nós',   path: '/sobre'      },
+              ].map((item) => (
+                <li key={item.label}>
+                  <Link
+                    to={item.path}
+                    className="text-[#C2D4C4] hover:text-white text-sm transition-colors duration-150"
+                  >
+                    {item.label}
+                  </Link>
                 </li>
               ))}
             </ul>
