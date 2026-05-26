@@ -8,7 +8,7 @@ import React, {
 import type { Product } from '../types';
 
 interface CartItem extends Product {
-  foto?: import("react/jsx-runtime").JSX.Element;
+  foto: string | null;
   quantidade: number;
 }
 
