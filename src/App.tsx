@@ -10,6 +10,7 @@ import Produto from "./pages/Produtos/Produto";
 import Login from "./pages/login/Login";
 import PratoSmart from "./pages/pratosmart/PratoSmart";
 import Sobre from "./pages/Sobre/Sobre";
+import Cadastro from "./pages/cadastro/Cadastro";
 function App() {
   return (
     <BrowserRouter>
@@ -34,6 +35,7 @@ function App() {
               <Route path="/PratoSmart" element={<PratoSmart />} />
               <Route path="/sobre" element={<Sobre />} />
               <Route path="/login" element={<Login />} />
+              <Route path="/cadastro" element={<Cadastro />} />
             </Routes>
           </main>
 
