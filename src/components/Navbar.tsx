@@ -119,6 +119,7 @@ export default function Navbar() {
 
           {/* BUSCA */}
           <button
+            onClick={() => navigate("/produtos")}
             className={`transition-colors p-1 ${
               useWhiteText
                 ? "text-white hover:text-white/80"
@@ -182,6 +183,16 @@ export default function Navbar() {
 
         {/* MOBILE */}
         <div className="md:hidden flex items-center gap-4">
+          <button
+            onClick={() => {
+              navigate("/produtos");
+              setIsMenuOpen(false);
+            }}
+            className="text-[#ffffff] flex items-center gap-2 font-semibold text-sm"
+          >
+            <MagnifyingGlass size={20} />
+            Buscar
+          </button>
 
           {/* CARRINHO MOBILE */}
           <button
