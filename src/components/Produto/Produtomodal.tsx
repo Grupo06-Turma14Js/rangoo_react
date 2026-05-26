@@ -120,8 +120,6 @@ const ProductModal: React.FC<ProductModalProps> = ({
   await onSubmit(payload);
 };
 
-  };
-
   if (!isOpen) return null;
 
   return (
@@ -174,18 +172,24 @@ const ProductModal: React.FC<ProductModalProps> = ({
             />
             {/* Pré-visualização da imagem caso o link seja inserido */}
             {form.foto && (
-              <div className="mt-3">
-                <p className="text-xs text-gray-500 mb-1">Pré-visualização:</p>
-                <img 
-                  src={form.foto} 
-                  alt="Preview do link inserido" 
-                  className="w-24 h-24 object-cover rounded-xl border border-gray-200"
-                  onError={(e) => {
-                    // Se o link for inválido, mostra uma imagem cinza de erro
-                    (e.target as HTMLImageElement).src = 'https://via.placeholder.com/150?text=Erro';
-                  }}
-                />
-              </div>
+            <div className="mt-3">
+              <p className="text-xs text-gray-500 mb-1">Pré-visualização:</p>
+              <img
+                src={`${form.foto}?t=${Date.now()}`}
+                alt="Preview do link inserido"
+                className="w-24 h-24 object-cover rounded-xl border border-gray-200"
+                onError={(e) => {
+                  const img = e.target as HTMLImageElement;
+                  img.onerror = null;
+                  img.style.display = 'none';
+                  const msg = img.nextElementSibling as HTMLElement;
+                  if (msg) msg.style.display = 'block';
+                }}
+              />
+              <p className="text-xs text-red-500 mt-1" style={{ display: 'none' }}>
+                Link inválido ou imagem não encontrada.
+              </p>
+            </div>
             )}
           </div>
 

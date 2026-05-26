@@ -75,12 +75,12 @@ export interface Produto {
   id: number;
   nome: string;
   descricao: string;
-  /** decimal no banco — pode chegar como string em alguns drivers */
   preco: number;
   ativo: boolean;
   imcMin: number | null;
   imcMax: number | null;
   objetivo: Objetivo | null;
+  foto: string | null;  
   categoria: Categoria;
   usuario: Usuario;
 }
