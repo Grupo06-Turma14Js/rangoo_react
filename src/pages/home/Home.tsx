@@ -4,19 +4,13 @@ import { FEEDBACKS_DATA } from "../../data/feedbacks";
 import feedbackDelivery from "../../assets/images/feedbackDelivery.png";
 import feedbackBg from "../../assets/images/feedback-bg.png";
 import { useNavigate } from "react-router-dom";
-
-import bebidas from "../../assets/images/Bebidas.png";
-import maisPedidos from "../../assets/images/Mais_pedidos.png";
-import marmitas from "../../assets/images/Marmitas.png";
-import organico from "../../assets/images/Organico.png";
-import sobremesa from "../../assets/images/Sobremesas.png";
+import { categoriaApi, produtoApi, type Categoria, type Produto } from "../../services/api";
 import {
   Leaf,
   CookingPot,
   Globe,
   ArrowRight,
   Star,
-  Quotes,
   ShoppingCartSimple,
   CheckCircle,
   ClipboardText,
@@ -93,32 +87,28 @@ function useStaggerInView(
   return { setRef, visibleSet };
 }
 
-// ─────────────────────────────────────────────
-// Classes de animação reutilizáveis
-// ─────────────────────────────────────────────
-const fadeUp = (inView: boolean, delay = 0) =>
-  `transition-all duration-700 ease-out ${delay ? `delay-[${delay}ms]` : ""} ${
-    inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
-  }`;
-
-const fadeLeft = (inView: boolean, delay = 0) =>
-  `transition-all duration-700 ease-out ${delay ? `delay-[${delay}ms]` : ""} ${
-    inView ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-16"
-  }`;
-
-const fadeRight = (inView: boolean, delay = 0) =>
-  `transition-all duration-700 ease-out ${delay ? `delay-[${delay}ms]` : ""} ${
-    inView ? "opacity-100 translate-x-0" : "opacity-0 translate-x-16"
-  }`;
-
 export default function Home() {
 
   const navigate = useNavigate();
 
-  const [activeCategory, setActiveCategory] = useState("Marmitas");
+  const [categorias, setCategorias] = useState<Categoria[]>([]);
+  const [produtosApi, setProdutosApi] = useState<Produto[]>([]);
   const [activeFeedback, setActiveFeedback] = useState(0);
 
   const productsRef = useRef<HTMLDivElement | null>(null);
+
+useEffect(() => {
+  categoriaApi.findAll()
+    .then((data) => { console.log("categorias:", data); setCategorias(data); })
+    .catch((err) => console.error("erro categorias:", err));
+}, []);
+
+
+useEffect(() => {
+  produtoApi.findAll()
+    .then((data) => { console.log("produtos:", data); setProdutosApi(data); })
+    .catch((err) => console.error("erro produtos:", err));
+}, []);
 
   const scrollProducts = (direction: string) => {
     if (productsRef.current) {
@@ -140,175 +130,26 @@ export default function Home() {
   const missaoLeft = useInView();
   const missaoRight = useInView();
   const productsHeader = useInView();
-  const testimonialsSection = useInView();
 
   // Stagger para cards de benefícios (3 itens)
   const benefitCards = useStaggerInView(3);
-  // Stagger para cards de categoria (5 itens)
-  const categoryCards = useStaggerInView(5);
   // Stagger para cards de diferenciais (3 itens)
   const diferenciais = useStaggerInView(3);
   // Stagger para cards de produtos (6 itens)
   const productCards = useStaggerInView(6);
 
   // ── Dados ──
-  const products = [
-    {
-      id: 1,
-      name: "Salmão Grelhado com Ervas & Arroz Negro",
-      price: "R$ 42,90",
-      rating: 4.9,
-      image:
-        "https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=500&auto=format&fit=crop&q=80",
-      tag: "Mais Vendido",
-    },
-    {
-      id: 2,
-      name: "Bowl de Frango Orgânico com Quinoa",
-      price: "R$ 34,50",
-      rating: 4.8,
-      image:
-        "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=500&auto=format&fit=crop&q=80",
-      tag: "Fit",
-    },
-    {
-      id: 3,
-      name: "Mix de Folhas Premium com Atum Selado",
-      price: "R$ 38,90",
-      rating: 4.7,
-      image:
-        "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=500&auto=format&fit=crop&q=80",
-      tag: "Low Carb",
-    },
-    {
-      id: 4,
-      name: "Nhoque de Batata Doce ao Sugo Funcional",
-      price: "R$ 32,00",
-      rating: 4.9,
-      image:
-        "https://images.unsplash.com/photo-1540420773420-3366772f4999?w=500&auto=format&fit=crop&q=80",
-      tag: "Veggie",
-    },
-    {
-      id: 5,
-      name: "Tilápia Grelhada com Purê de Mandioquinha",
-      price: "R$ 36,90",
-      rating: 4.8,
-      image:
-        "https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=500&auto=format&fit=crop&q=80",
-      tag: "Destaque",
-    },
-    {
-      id: 6,
-      name: "Strogonoff Vegano de Cogumelos",
-      price: "R$ 31,50",
-      rating: 4.7,
-      image:
-        "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=500&auto=format&fit=crop&q=80",
-      tag: "Sem Lactose",
-    },
-  ];
+  // Usa produtos da API (primeiros 6) ou fallback vazio
+  const products = produtosApi.slice(0, 6).map((p) => ({
+    id: p.id,
+    name: p.nome,
+    price: `R$ ${Number(p.preco).toFixed(2).replace(".", ",")}`,
+    rating: 4.8,
+    image: p.foto || "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=500&auto=format&fit=crop&q=80",
+    tag: p.categoria?.nome ?? "Saudável",
+  }));
 
-  const testimonials = [
-    {
-      id: 1,
-      name: "Alice Tunker",
-      role: "CLIENTE FIEL",
-      text: "Pedir na Rangoo mudou completamente a minha rotina de alimentação. As marmitas chegam sempre frescas, tempero no ponto certo e com aquela sensação de comida de verdade. Além disso, o aplicativo é super prático.",
-      avatar:
-        "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80",
-    },
-    {
-      id: 2,
-      name: "Bruno Silva",
-      role: "CLIENTE HÁ 6 MESES",
-      text: "O plano Smart me ajudou a economizar tempo e manter a dieta sem errar. A entrega é sempre pontual e a variedade de pratos saudáveis impede que a rotina fique enjoativa. Recomendo de olhos fechados!",
-      avatar:
-        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80",
-    },
-    {
-      id: 3,
-      name: "Camila Rocha",
-      role: "ENTUSIASTA FITNESS",
-      text: "A qualidade dos ingredientes é nítida logo na primeira garfada. Os vegetais têm cor, o frango é suculento e o sabor é caseiro de verdade. Não passo mais duas horas na cozinha no domingo!",
-      avatar:
-        "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&auto=format&fit=crop&q=80",
-    },
-    {
-      id: 4,
-      name: "Diego Ramos",
-      role: "FOCO NA DIETA",
-      text: "Minha taxa de colesterol despencou depois que troquei o delivery comum pelas marmitas da Rangoo. Saber a quantidade exata de macros em cada prato facilitou muito o meu processo de emagrecimento.",
-      avatar:
-        "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80",
-    },
-    {
-      id: 5,
-      name: "Elena Martins",
-      role: "ROTINA CORRIDA",
-      text: "Trabalho home office e mal tinha tempo de almoçar direito. A Rangoo salvou meus dias com refeições ultracongeladas que parecem que foram feitas na hora. O nhoque de batata doce é de outro mundo!",
-      avatar:
-        "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80",
-    },
-  ];
 
-  const categoryData = [
-    {
-      id: "sobremesas",
-      label: "Sobremesas",
-      count: 18,
-      src: sobremesa,
-      bg: "bg-[#FFF7ED]",
-      border: "border-orange-50/50",
-      textColor: "text-[#2C2520]",
-      subColor: "text-[#2C2520]/60",
-      arrowBg: "bg-[#D97706]",
-    },
-    {
-      id: "marmitas",
-      label: "Marmitas",
-      count: 52,
-      src: marmitas,
-      bg: "bg-[#E8F0E8]",
-      border: "border-emerald-100/50",
-      textColor: "text-[#2A4B2A]",
-      subColor: "text-[#2A4B2A]/60",
-      arrowBg: "bg-[#2A4B2A]",
-    },
-    {
-      id: "bebidas",
-      label: "Bebidas",
-      count: 25,
-      src: bebidas,
-      bg: "bg-[#FDF2F4]",
-      border: "border-pink-50/50",
-      textColor: "text-[#3C2025]",
-      subColor: "text-[#3C2025]/60",
-      arrowBg: "bg-[#9F2C43]",
-    },
-    {
-      id: "organicos",
-      label: "Orgânicos",
-      count: 30,
-      src: organico,
-      bg: "bg-[#EEF2FF]",
-      border: "border-indigo-50/50",
-      textColor: "text-[#1E253C]",
-      subColor: "text-[#1E253C]/60",
-      arrowBg: "bg-[#3B4680]",
-    },
-    {
-      id: "mais-pedidos",
-      label: "Mais Pedidos",
-      count: 12,
-      src: maisPedidos,
-      bg: "bg-[#FEFCE8]",
-      border: "border-yellow-50/50",
-      textColor: "text-[#3C371E]",
-      subColor: "text-[#3C371E]/60",
-      arrowBg: "bg-[#A1821F]",
-    },
-  ];
 
   const diferencialData = [
     {
@@ -363,11 +204,11 @@ export default function Home() {
                 frescos e orgânicos para uma vida melhor.
               </p>
               <div className="flex flex-row items-center gap-4 pt-4">
-                <button 
+              <button 
                 onClick={() => navigate("/produtos")}
                 className="cursor-pointer px-8 py-3.5 bg-[#2A4B2A] hover:bg-[#2a3a1f] text-white font-bold rounded-full shadow-lg shadow-black/20 transition-all transform hover:-translate-y-0.5 whitespace-nowrap text-sm sm:text-base">
-                  Peça Agora
-                </button>
+                Peça Agora
+              </button>
                 <button 
                 onClick={() => navigate("/sobre")}
                 className="cursor-pointer px-8 py-3.5 bg-transparent text-[#2A4B2A] font-bold rounded-full border border-[#2A4B2A] hover:bg-[#2A4B2A] hover:text-white hover:-translate-y-0.5 hover:shadow-md transition-all whitespace-nowrap text-sm sm:text-base">
@@ -491,89 +332,117 @@ export default function Home() {
         </div>
       </div>
 
-      {/* ── SEÇÃO CATEGORIAS ── */}
-      <section
-        id="categorias-section"
-        className="w-full bg-[#FAF9F5] pt-10 pb-2 px-4 sm:px-6 lg:px-8 select-none"
-      >
-        <div className="max-w-7xl mx-auto">
-          {/* Header da seção — fade up */}
-          <div
-            ref={categoriesHeader.ref as React.RefObject<HTMLDivElement>}
-            className={`flex items-end justify-between mb-6 transition-all duration-700 ease-out ${
-              categoriesHeader.inView
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-8"
-            }`}
-          >
-            <div className="space-y-1">
-              <span className="text-xs font-bold text-[#2A4B2A] tracking-widest uppercase block mb-1">
-                MAIS PEDIDOS
-              </span>
-              <h2 className="text-2xl sm:text-3xl font-black text-[#0F172A]">
-                Categorias
-              </h2>
-            </div>
-            <button
-              onClick={() =>
-                document
-                  .getElementById("produtos-section")
-                  ?.scrollIntoView({ behavior: "smooth" })
-              }
-              className="flex items-center gap-1 text-[#2A4B2A] font-sans font-semibold text-xs sm:text-sm hover:opacity-80 transition-opacity"
-            >
-              Ver Todos <span className="text-base">→</span>
-            </button>
-          </div>
+{/* ── SEÇÃO CATEGORIAS ── */}
+<section
+  id="categorias-section"
+  className="w-full bg-[#FAF9F5] pt-10 pb-2 px-4 sm:px-6 lg:px-8 select-none"
+>
+  <div className="max-w-7xl mx-auto">
+    {/* Header */}
+    <div
+      ref={categoriesHeader.ref as React.RefObject<HTMLDivElement>}
+      className={`flex items-end justify-between mb-6 transition-all duration-700 ease-out ${
+        categoriesHeader.inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+      }`}
+    >
+      <div className="space-y-1">
+        <span className="text-xs font-bold text-[#2A4B2A] tracking-widest uppercase block mb-1">
+          MAIS PEDIDOS
+        </span>
+        <h2 className="text-2xl sm:text-3xl font-black text-[#0F172A]">Categorias</h2>
+      </div>
+      <div className="flex items-center gap-3">
+        <button
+          onClick={() => {
+            const el = document.getElementById("cat-scroll");
+            if (el) el.scrollBy({ left: -300, behavior: "smooth" });
+          }}
+          className="w-10 h-10 rounded-full border border-[#2A4B2A]/20 flex items-center justify-center text-[#2A4B2A] hover:bg-[#2A4B2A] hover:text-white transition-all bg-white shadow-sm"
+        >
+          <ArrowLeft size={18} weight="bold" />
+        </button>
+        <button
+          onClick={() => {
+            const el = document.getElementById("cat-scroll");
+            if (el) el.scrollBy({ left: 300, behavior: "smooth" });
+          }}
+          className="w-10 h-10 rounded-full border border-[#2A4B2A]/20 flex items-center justify-center text-[#2A4B2A] hover:bg-[#2A4B2A] hover:text-white transition-all bg-white shadow-sm"
+        >
+          <ArrowRight size={18} weight="bold" />
+        </button>
+      </div>
+    </div>
 
-          {/* Cards de categoria — stagger */}
-          <div className="relative flex items-center group">
-            <div className="w-full flex gap-4 overflow-x-auto pb-8 pt-2 scrollbar-none snap-x snap-mandatory px-2 overflow-visible">
-              {categoryData.map((cat, i) => (
-                <div
-                  key={cat.id}
-                  ref={
-                    categoryCards.setRef(i) as React.RefCallback<HTMLDivElement>
-                  }
-                  onClick={() =>
-                    document
-                      .getElementById(`categoria-${cat.id}`)
-                      ?.scrollIntoView({ behavior: "smooth" })
-                  }
-                  className={`relative min-w-43.75 flex-1 snap-start ${cat.bg} border ${cat.border} rounded-2xl p-4 pb-7 flex flex-col items-center text-center shadow-[0_8px_20px_-6px_rgba(0,0,0,0.05)] cursor-pointer hover:shadow-xl hover:scale-105 transition-all duration-300 group/card
-                    ${categoryCards.visibleSet.has(i) ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}
-                  style={{
-                    transitionDelay: `${i * 100}ms`,
-                    transitionDuration: "600ms",
-                    transitionTimingFunction: "cubic-bezier(0.22,1,0.36,1)",
-                  }}
-                >
-                  <div className="w-24 h-24 flex items-center justify-center mb-3 mix-blend-multiply group-hover/card:scale-110 transition-transform duration-300">
-                    <img
-                      src={cat.src}
-                      alt={cat.label}
-                      className="w-full h-full object-contain"
-                    />
-                  </div>
-                  <h3
-                    className={`font-logo-rangoo text-lg ${cat.textColor} font-medium`}
-                  >
-                    {cat.label}
+    {/* Cards */}
+    <div
+      id="cat-scroll"
+      className={`w-full flex gap-5 pb-6 pt-2 scrollbar-none snap-x snap-mandatory px-2 overflow-x-auto transition-all duration-700 ease-out ${
+        categoriesHeader.inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
+      }`}
+    >
+      {(() => {
+        const PASTEL_COLORS = [
+          { bg: "bg-[#FEF3C7]", badge: "text-[#92400E] bg-amber-100"   },
+          { bg: "bg-[#DCFCE7]", badge: "text-[#166534] bg-green-100"   },
+          { bg: "bg-[#FCE7F3]", badge: "text-[#9D174D] bg-pink-100"    },
+          { bg: "bg-[#EDE9FE]", badge: "text-[#5B21B6] bg-violet-100"  },
+          { bg: "bg-[#DBEAFE]", badge: "text-[#1E40AF] bg-blue-100"    },
+          { bg: "bg-[#FFEDD5]", badge: "text-[#9A3412] bg-orange-100"  },
+          { bg: "bg-[#F0FDF4]", badge: "text-[#14532D] bg-emerald-100" },
+          { bg: "bg-[#FDF2F8]", badge: "text-[#701A75] bg-fuchsia-100" },
+          { bg: "bg-[#FFF7ED]", badge: "text-[#7C2D12] bg-orange-50"   },
+          { bg: "bg-[#F0F9FF]", badge: "text-[#0C4A6E] bg-sky-100"     },
+          { bg: "bg-[#FEFCE8]", badge: "text-[#713F12] bg-yellow-100"  },
+          { bg: "bg-[#F7FEE7]", badge: "text-[#365314] bg-lime-100"    },
+        ];
+
+        if (categorias.length === 0) {
+          return Array.from({ length: 5 }).map((_, i) => (
+            <div key={i} className="min-w-52 sm:min-w-60 flex-1 snap-start bg-white rounded-3xl border border-slate-100 overflow-hidden shadow-sm animate-pulse h-56" />
+          ));
+        }
+
+        return categorias.map((cat, i) => {
+          const color = PASTEL_COLORS[i % PASTEL_COLORS.length];
+          const produtoCat = produtosApi.find((p) => p.categoria?.id === cat.id && p.foto);
+          const imgUrl = produtoCat?.foto ||
+            "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=500&auto=format&fit=crop&q=80";
+
+          return (
+            <div
+              key={cat.id}
+              onClick={() => navigate(`/produtos?categoria=${cat.id}`)}
+              className={`min-w-52 sm:min-w-60 flex-1 snap-start rounded-3xl border border-slate-100 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col cursor-pointer group ${color.bg}`}
+              style={{ transitionDelay: `${i * 60}ms` }}
+            >
+              <div className="relative overflow-hidden aspect-4/3">
+                <span className={`absolute top-3 left-3 z-10 ${color.badge} px-2.5 py-1 rounded-full text-[10px] font-bold shadow-sm`}>
+                  {cat.produtos?.length ?? 0} opções
+                </span>
+                <img
+                  src={imgUrl}
+                  alt={cat.nome}
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+              </div>
+              <div className="p-4 flex items-center justify-between">
+                <div>
+                  <h3 className="font-bold text-[#0F172A] text-sm leading-snug group-hover:text-[#2A4B2A] transition-colors">
+                    {cat.nome}
                   </h3>
-                  <p className={`text-[11px] ${cat.subColor} mt-0.5`}>
-                    ({cat.count} opções)
-                  </p>
-                  <div
-                    className={`absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-10 h-10 rounded-full ${cat.arrowBg} text-white flex items-center justify-center shadow-md opacity-0 scale-75 group-hover/card:opacity-100 group-hover/card:scale-100 transition-all duration-300 z-10`}
-                  >
-                    <ArrowRight size={16} weight="bold" />
-                  </div>
+                  <p className="text-xs text-[#64748B] mt-0.5 line-clamp-1">{cat.descricao}</p>
                 </div>
-              ))}
+                <button className="p-2 rounded-xl bg-white/70 text-[#0F172A] hover:bg-[#2A4B2A] hover:text-white transition-all duration-200 shadow-sm shrink-0 ml-2">
+                  <ArrowRight size={14} weight="bold" />
+                </button>
+              </div>
             </div>
-          </div>
-        </div>
-      </section>
+          );
+        });
+      })()}
+    </div>
+  </div>
+</section>
 
       {/* ── SEÇÃO POR QUE A RANGOO EXISTE? ── */}
       <section
@@ -728,7 +597,7 @@ export default function Home() {
               key={product.id}
               ref={productCards.setRef(i) as React.RefCallback<HTMLDivElement>}
               className={`min-w-60 sm:min-w-65 max-w-65 flex-1 snap-start bg-white rounded-3xl border border-slate-100 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between group
-                ${productCards.visibleSet.has(i) ? "opacity-100 translate-y-0 scale-100" : "opacity-0 translate-y-12 scale-95"}`}
+                ${productCards.visibleSet.has(i) ? "opacity-100 translate-y-0 scale-100" : ""}`}
               style={{
                 transitionDelay: `${i * 80}ms`,
                 transitionDuration: "600ms",
@@ -736,7 +605,7 @@ export default function Home() {
               }}
             >
               <div className="relative overflow-hidden aspect-4/3">
-                <span className="absolute top-3 left-3 z-10 bg-white/90 backdrop-blur-md px-2.5 py-1 rounded-full text-[10px] font-bold text-[#2A4B2A] border border-white/40 shadow-sm">
+                <span className="absolute top-3 left-3 z-10 bg-white/90 backdrop-blur-md px-2.5 py-1 rounded-full text-[12px] font-bold text-[#2A4B2A] border border-white/40 shadow-sm">
                   {product.tag}
                 </span>
                 <img

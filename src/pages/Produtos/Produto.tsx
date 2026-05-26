@@ -6,7 +6,7 @@ import {
   Spinner,
 } from '@phosphor-icons/react';
 import { toast } from 'react-toastify';
-
+import { useSearchParams } from "react-router-dom";
 import ProductCard from '../../components/Produto/Produtocard';
 
 import { produtoApi, categoriaApi, type ProdutoPayload, session } from '../../services/api';
@@ -21,9 +21,11 @@ const Products: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [loadingProducts, setLoadingProducts] = useState(true);
-
+  const [searchParams] = useSearchParams();
   const [search, setSearch] = useState('');
-  const [activeCategoryFilter, setActiveCategoryFilter] = useState<string>('all');
+  const [activeCategoryFilter, setActiveCategoryFilter] = useState<string>(
+  searchParams.get("categoria") ?? "all"
+);
   const [sortOption, setSortOption] = useState<SortOption>('name');
 
   const [productModalOpen, setProductModalOpen] = useState(false);
