@@ -63,7 +63,7 @@ export default function Cadastro() {
 
       console.error(error);
 
-      setErro("Erro ao cadastrar usuário");
+      setErro("Erro ao cadastrar usuário: a senha deve conter no mínimo 8 caracteres.");
 
     } finally {
 
