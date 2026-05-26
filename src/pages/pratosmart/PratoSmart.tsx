@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { Leaf, Heart, Package, Lightbulb, ArrowLeft, ArrowRight } from "@phosphor-icons/react";
-import { session } from "../../services/api";
+import { Leaf, Heart, Package, Lightbulb, ArrowLeft, ArrowRight, Spinner } from "@phosphor-icons/react";
+import { session, produtoApi, type Produto, type Objetivo } from "../../services/api";
+import feedbackBg from "../../assets/images/feedback-bg.png";
 
 interface IMCResult {
     valor: number;
@@ -11,87 +12,34 @@ interface IMCResult {
 function calcularIMC(peso: number, altura: number): IMCResult {
     const h = altura / 100;
     const imc = peso / (h * h);
-
-    if (imc < 18.5) return {
-        valor: imc,
-        classificacao: "Abaixo do peso",
-        dica: "Seu IMC indica abaixo do peso ideal. Recomendamos refeições com maior aporte calórico e proteico para ajudar a atingir um peso saudável.",
-    };
-    if (imc < 25) return {
-        valor: imc,
-        classificacao: "Peso saudável",
-        dica: "Seu IMC está dentro da faixa saudável. Continue mantendo uma alimentação equilibrada e hábitos saudáveis com nossas refeições de bem-estar cuidadosamente selecionadas.",
-    };
-    if (imc < 30) return {
-        valor: imc,
-        classificacao: "Sobrepeso",
-        dica: "Seu IMC indica sobrepeso. Nossas refeições leves e nutritivas podem te ajudar a retomar o equilíbrio de forma saborosa e saudável.",
-    };
-    if (imc < 35) return {
-        valor: imc,
-        classificacao: "Obesidade grau I",
-        dica: "Recomendamos refeições com controle calórico e alto valor nutricional para apoiar sua jornada de saúde.",
-    };
-    return {
-        valor: imc,
-        classificacao: "Obesidade grau II+",
-        dica: "Priorize refeições ricas em fibras e proteína magra. Nossas opções especializadas podem ser um ótimo ponto de partida.",
-    };
+    if (imc < 18.5) return { valor: imc, classificacao: "Abaixo do peso", dica: "Seu IMC indica abaixo do peso ideal. Recomendamos refeições com maior aporte calórico e proteico para ajudar a atingir um peso saudável." };
+    if (imc < 25)   return { valor: imc, classificacao: "Peso saudável",   dica: "Seu IMC está dentro da faixa saudável. Continue mantendo uma alimentação equilibrada e hábitos saudáveis com nossas refeições de bem-estar cuidadosamente selecionadas." };
+    if (imc < 30)   return { valor: imc, classificacao: "Sobrepeso",       dica: "Seu IMC indica sobrepeso. Nossas refeições leves e nutritivas podem te ajudar a retomar o equilíbrio de forma saborosa e saudável." };
+    if (imc < 35)   return { valor: imc, classificacao: "Obesidade grau I", dica: "Recomendamos refeições com controle calórico e alto valor nutricional para apoiar sua jornada de saúde." };
+    return { valor: imc, classificacao: "Obesidade grau II+", dica: "Priorize refeições ricas em fibras e proteína magra. Nossas opções especializadas podem ser um ótimo ponto de partida." };
 }
 
-const refeicoes = [
-    {
-        nome: "Grilled Salmon Plate",
-        desc: "Salmão grelhado com legumes frescos da época, azeite e ervas finas.",
-        preco: "R$ 24,90",
-        cal: "380 kcal",
-        img: "https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=400&q=80",
-    },
-    {
-        nome: "Matcha Energy Ball",
-        desc: "Bolinhos de matcha com aveia, mel e sementes de chia.",
-        preco: "R$ 6,50",
-        cal: "210 kcal",
-        img: "https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=400&q=80",
-    },
-    {
-        nome: "Mediterranean Salad",
-        desc: "Mix de folhas, tomate, pepino, azeitona e queijo feta.",
-        preco: "R$ 16,50",
-        cal: "290 kcal",
-        img: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=400&q=80",
-    },
-    {
-        nome: "Organic Oatmeal Bowl",
-        desc: "Aveia orgânica com frutas vermelhas, granola e mel silvestre.",
-        preco: "R$ 13,50",
-        cal: "340 kcal",
-        img: "https://images.unsplash.com/photo-1494597564530-871f2b93ac55?w=400&q=80",
-    },
-    {
-        nome: "Grilled Salmon Plate",
-        desc: "Salmão grelhado com legumes frescos da época, azeite e ervas finas.",
-        preco: "R$ 24,90",
-        cal: "380 kcal",
-        img: "https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=400&q=80",
-    },
-    {
-        nome: "Matcha Energy Ball",
-        desc: "Bolinhos de matcha com aveia, mel e sementes de chia.",
-        preco: "R$ 6,50",
-        cal: "210 kcal",
-        img: "https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=400&q=80",
-    },
+const OBJETIVOS: { id: Objetivo; label: string; emoji: string }[] = [
+    { id: "emagrecimento", label: "Emagrecimento",  emoji: "🔥" },
+    { id: "ganho-massa",   label: "Ganho de massa", emoji: "💪" },
+    { id: "vegetariano", label: "Vegetariano", emoji: "🥦" },
+    { id: "diabetico",     label: "Diabético",       emoji: "🩺" },
+    { id: "sem-lactose",   label: "Sem lactose",     emoji: "🥛" },
+    { id: "sem-gluten",    label: "Sem glúten",      emoji: "🌾" },
 ];
 
 const VISIBLE = 4;
 
 export default function PratoSmart() {
     const usuario = session.getUsuario();
-    const [nome, setNome] = useState((usuario?.nome ?? ""));
+
+    const [nome]          = useState(usuario?.nome ?? "");
     const [peso, setPeso] = useState("");
     const [altura, setAltura] = useState("");
     const [resultado, setResultado] = useState<IMCResult | null>(null);
+    const [objetivo, setObjetivo]   = useState<Objetivo | null>(null);
+    const [produtos, setProdutos]   = useState<Produto[]>([]);
+    const [loadingProd, setLoadingProd] = useState(false);
     const [carouselIdx, setCarouselIdx] = useState(0);
 
     function handleCalcular() {
@@ -99,9 +47,29 @@ export default function PratoSmart() {
         const a = parseFloat(altura);
         if (!p || !a || p <= 0 || a <= 0) return;
         setResultado(calcularIMC(p, a));
+        setObjetivo(null);
+        setProdutos([]);
+        setCarouselIdx(0);
     }
 
-    const maxIdx = refeicoes.length - VISIBLE;
+    async function handleObjetivo(obj: Objetivo) {
+        if (!resultado) return;
+        setObjetivo(obj);
+        setLoadingProd(true);
+        setProdutos([]);
+        setCarouselIdx(0);
+        try {
+            const data = await produtoApi.findRecomendados(resultado.valor, obj);
+            setProdutos(data);
+        } catch {
+            setProdutos([]);
+        } finally {
+            setLoadingProd(false);
+            setTimeout(() => document.getElementById("recomendados")?.scrollIntoView({ behavior: "smooth" }), 100);
+        }
+    }
+
+    const maxIdx = Math.max(0, produtos.length - VISIBLE);
     const canPrev = carouselIdx > 0;
     const canNext = carouselIdx < maxIdx;
 
@@ -146,7 +114,6 @@ export default function PratoSmart() {
                     Insira seus dados abaixo e nosso algoritmo inteligente analisará sua composição corporal para recomendar as refeições perfeitas para a sua jornada de bem-estar.
                 </p>
 
-                {/* Formulário */}
                 <div className="bg-white rounded-2xl shadow-sm border border-[#e8ede4] p-8 text-left mb-6">
                     <div className="mb-5">
                         <label className="block text-xs text-[#5a6a52] mb-1.5">Nome</label>
@@ -154,9 +121,8 @@ export default function PratoSmart() {
                             type="text"
                             value={nome}
                             readOnly
-                            onChange={(e) => setNome(e.target.value)}
                             placeholder="Seu nome"
-                            className="w-full border border-[#dde5d8] rounded-lg px-4 py-2.5 text-sm text-[#1a1a1a] placeholder-[#b0bca8] focus:outline-none focus:ring-2 focus:ring-[#2d5a27] transition"
+                            className="w-full border border-[#dde5d8] rounded-lg px-4 py-2.5 text-sm text-[#1a1a1a] bg-[#f5f5f0] placeholder-[#b0bca8] cursor-default focus:outline-none"
                         />
                     </div>
 
@@ -207,7 +173,7 @@ export default function PratoSmart() {
                             {resultado.classificacao}
                         </span>
 
-                        <div className="bg-[#f5f5f0] rounded-xl p-4 text-left flex gap-3">
+                        <div className="bg-[#f5f5f0] rounded-xl p-4 text-left flex gap-3 mb-6">
                             <div className="w-8 h-8 bg-[#e8ede4] rounded-lg flex items-center justify-center shrink-0 mt-0.5">
                                 <Lightbulb size={16} color="#5a6a52" weight="duotone" />
                             </div>
@@ -216,91 +182,133 @@ export default function PratoSmart() {
                                 <p className="text-xs text-[#5a6a52] leading-relaxed">{resultado.dica}</p>
                             </div>
                         </div>
+
+                        {/* ── MENU DE OBJETIVOS ── */}
+                        <div className="border-t border-[#e8ede4] pt-6">
+                            <p className="text-sm font-semibold text-[#1a1a1a] mb-4">Qual é o seu objetivo?</p>
+                            <div className="grid grid-cols-2 gap-2">
+                                {OBJETIVOS.map((obj) => (
+                                    <button
+                                        key={obj.id}
+                                        onClick={() => handleObjetivo(obj.id)}
+                                        className={`flex items-center gap-2 px-4 py-3 rounded-xl text-sm font-medium border-2 transition-all
+                                            ${objetivo === obj.id
+                                                ? "bg-[#2d5a27] text-white border-[#2d5a27]"
+                                                : "bg-white text-[#5a6a52] border-[#dde5d8] hover:border-[#2d5a27] hover:text-[#2d5a27]"}
+                                            ${obj.id === "sem-gluten"}`}
+                                    >
+                                        <span>{obj.emoji}</span>
+                                        {obj.label}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
                     </div>
                 )}
             </section>
 
-            {/* ── RECOMENDADO PARA VOCÊ ── */}
-            {resultado && (
-                <section className="px-8 py-12 max-w-6xl mx-auto">
+            {/* ── RECOMENDADOS ── */}
+            {resultado && objetivo && (
+                <section id="recomendados" className="px-8 py-12 max-w-6xl mx-auto">
                     <h2 className="text-3xl font-bold text-[#1a1a1a] mb-2 text-center">Recomendado para você</h2>
                     <p className="text-sm text-[#7a8a72] text-center mb-10 max-w-xl mx-auto leading-relaxed">
-                        Com base no seu IMC e na sua meta de estilo de vida saudável, aqui estão as refeições que nosso algoritmo de nutrição selecionou para o seu bem-estar ideal.
+                        Com base no seu IMC e no objetivo selecionado, aqui estão as refeições que nosso algoritmo selecionou para o seu bem-estar.
                     </p>
 
-                    <div className="relative">
-                        {/* Botão esquerdo */}
-                        <button
-                            onClick={() => setCarouselIdx((i) => Math.max(0, i - 1))}
-                            disabled={!canPrev}
-                            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-5 z-10 w-10 h-10 rounded-full bg-white border border-[#e8ede4] shadow flex items-center justify-center hover:bg-[#f5f5f0] transition disabled:opacity-30"
-                        >
-                            <ArrowLeft size={18} color="#2d5a27" weight="bold" />
-                        </button>
+                    {/* Loading */}
+                    {loadingProd && (
+                        <div className="flex justify-center py-16">
+                            <Spinner size={36} color="#2d5a27" className="animate-spin" />
+                        </div>
+                    )}
 
-                        {/* Cards */}
-                        <div className="overflow-hidden">
-                            <div
-                                className="flex gap-4 transition-transform duration-300"
-                                style={{ transform: `translateX(calc(-${carouselIdx * (100 / VISIBLE)}% - ${carouselIdx * 4}px))` }}
+                    {/* Vazio */}
+                    {!loadingProd && produtos.length === 0 && (
+                        <div className="text-center py-16">
+                            <p className="text-[#7a8a72] text-sm">Nenhum produto encontrado para este perfil.</p>
+                        </div>
+                    )}
+
+                    {/* Carousel */}
+                    {!loadingProd && produtos.length > 0 && (
+                        <div className="relative">
+                            <button
+                                onClick={() => setCarouselIdx((i) => Math.max(0, i - 1))}
+                                disabled={!canPrev}
+                                className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-5 z-10 w-10 h-10 rounded-full bg-white border border-[#e8ede4] shadow flex items-center justify-center hover:bg-[#f5f5f0] transition disabled:opacity-30"
                             >
-                                {refeicoes.map((r, i) => (
-                                    <div
-                                        key={i}
-                                        className="bg-white rounded-2xl border border-[#e8ede4] shadow-sm shrink-0 overflow-hidden flex flex-col"
-                                        style={{ width: `calc(${100 / VISIBLE}% - 12px)` }}
-                                    >
-                                        <div className="relative h-36 overflow-hidden">
-                                            <span className="absolute top-2 left-2 bg-[#2d5a27] text-white text-[10px] font-semibold px-2.5 py-0.5 rounded-full z-10">
-                                                Saudável
-                                            </span>
-                                            <img src={r.img} alt={r.nome} className="w-full h-full object-cover" />
-                                        </div>
-                                        <div className="p-4 flex flex-col flex-1">
-                                            <p className="text-xs font-bold text-[#1a1a1a] mb-1 leading-snug">{r.nome}</p>
-                                            <p className="text-[10px] text-[#7a8a72] leading-relaxed mb-2 flex-1">{r.desc}</p>
-                                            <p className="text-[10px] text-[#b0bca8] mb-3">🔥 {r.cal}</p>
-                                            <div className="flex items-center justify-between">
-                                                <span className="text-sm font-bold text-[#1a1a1a]">{r.preco}</span>
-                                                <button className="bg-[#2d5a27] text-white text-[10px] font-semibold px-3 py-1.5 rounded-full hover:bg-[#3d7535] transition">
-                                                    Peça Agora
-                                                </button>
+                                <ArrowLeft size={18} color="#2d5a27" weight="bold" />
+                            </button>
+
+                            <div className="overflow-hidden">
+                                <div
+                                    className="flex gap-4 transition-transform duration-300"
+                                    style={{ transform: `translateX(calc(-${carouselIdx * (100 / VISIBLE)}% - ${carouselIdx * 4}px))` }}
+                                >
+                                    {produtos.map((p) => (
+                                        <div
+                                            key={p.id}
+                                            className="bg-white rounded-2xl border border-[#e8ede4] shadow-sm shrink-0 overflow-hidden flex flex-col"
+                                            style={{ width: `calc(${100 / VISIBLE}% - 12px)` }}
+                                        >
+                                            <div className="relative h-36 overflow-hidden bg-[#e8ede4]">
+                                                <span className="absolute top-2 left-2 bg-[#2d5a27] text-white text-[10px] font-semibold px-2.5 py-0.5 rounded-full z-10">
+                                                    Saudável
+                                                </span>
+                                                {p.foto ? (
+                                                    <img
+                                                        src={p.foto}
+                                                        alt={p.nome}
+                                                        className="w-full h-full object-cover"
+                                                        onError={(e) => {
+                                                            const img = e.target as HTMLImageElement;
+                                                            img.onerror = null;
+                                                            img.style.display = 'none';
+                                                        }}
+                                                    />
+                                                ) : (
+                                                    <div className="w-full h-full flex items-center justify-center">
+                                                        <Leaf size={32} color="#c8d8b8" weight="duotone" />
+                                                    </div>
+                                                )}
+                                            </div>
+                                            <div className="p-4 flex flex-col flex-1">
+                                                <p className="text-xs font-bold text-[#1a1a1a] mb-1 leading-snug">{p.nome}</p>
+                                                <p className="text-[10px] text-[#7a8a72] leading-relaxed mb-3 flex-1">{p.descricao}</p>
+                                                <div className="flex items-center justify-between">
+                                                    <span className="text-sm font-bold text-[#1a1a1a]">
+                                                        R$ {Number(p.preco).toFixed(2)}
+                                                    </span>
+                                                    <button className="bg-[#2d5a27] text-white text-[10px] font-semibold px-3 py-1.5 rounded-full hover:bg-[#3d7535] transition">
+                                                        Peça Agora
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                ))}
+                                    ))}
+                                </div>
                             </div>
-                        </div>
 
-                        {/* Botão direito */}
-                        <button
-                            onClick={() => setCarouselIdx((i) => Math.min(maxIdx, i + 1))}
-                            disabled={!canNext}
-                            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-5 z-10 w-10 h-10 rounded-full bg-[#f97316] shadow flex items-center justify-center hover:bg-[#ea6c0a] transition disabled:opacity-30"
-                        >
-                            <ArrowRight size={18} color="white" weight="bold" />
-                        </button>
-                    </div>
+                            <button
+                                onClick={() => setCarouselIdx((i) => Math.min(maxIdx, i + 1))}
+                                disabled={!canNext}
+                                className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-5 z-10 w-10 h-10 rounded-full bg-[#f97316] shadow flex items-center justify-center hover:bg-[#ea6c0a] transition disabled:opacity-30"
+                            >
+                                <ArrowRight size={18} color="white" weight="bold" />
+                            </button>
+                        </div>
+                    )}
                 </section>
             )}
 
-            {/* ── TORN PAPER DIVIDER ── */}
-            <div className="w-full overflow-hidden leading-none mt-8" style={{ height: "80px" }}>
-                <svg
-                    viewBox="0 0 1440 80"
-                    preserveAspectRatio="none"
-                    className="w-full h-full"
-                    xmlns="http://www.w3.org/2000/svg"
-                >
-                    <path
-                        d="M0,45 L8,38 L18,50 L28,32 L40,48 L52,28 L62,44 L75,22 L88,42 L100,18 L114,40 L126,15 L140,38 L155,10 L168,35 L182,8 L196,32 L210,5 L225,30 L240,8 L255,35 L270,12 L285,38 L300,15 L316,40 L332,10 L348,36 L365,8 L382,34 L400,6 L418,32 L436,4 L455,30 L474,6 L493,34 L512,2 L532,28 L552,0 L572,26 L592,4 L612,32 L633,2 L654,30 L675,5 L696,33 L718,8 L740,36 L762,6 L785,34 L808,4 L832,30 L856,2 L880,28 L904,0 L928,26 L952,4 L976,32 L1000,2 L1024,30 L1048,5 L1072,33 L1096,8 L1120,36 L1144,6 L1168,34 L1192,4 L1216,30 L1240,2 L1264,28 L1288,6 L1312,34 L1336,8 L1360,36 L1384,10 L1408,38 L1432,12 L1440,30 L1440,80 L0,80 Z"
-                        fill="#c8d8b8"
-                    />
-                </svg>
-            </div>
-
             {/* ── BENEFÍCIOS ── */}
-            <section className="bg-[#c8d8b8] px-8 py-14">
+                    <section
+                    className="w-full py-20 px-8 overflow-hidden relative bg-no-repeat bg-top"
+                    style={{
+                        backgroundImage: `url(${feedbackBg})`,
+                        backgroundSize: "100% auto",
+                    }}
+                    >
                 <div className="max-w-4xl mx-auto">
                     <h2 className="text-2xl font-bold text-[#2d5a27] mb-1">Benefícios a Saúde</h2>
                     <p className="text-sm text-[#5a6a52] mb-10">Combinamos tecnologia + excelência.</p>
@@ -310,7 +318,7 @@ export default function PratoSmart() {
                             <div className="w-12 h-12 bg-[#e8f5e0] rounded-xl flex items-center justify-center mx-auto mb-4">
                                 <Leaf size={24} color="#2d5a27" weight="duotone" />
                             </div>
-                            <h3 className="text-sm font-bold text-[#1a1a1a] mb-2">Igredientes Frescos</h3>
+                            <h3 className="text-sm font-bold text-[#1a1a1a] mb-2">Ingredientes Frescos</h3>
                             <p className="text-xs text-[#7a8a72] leading-relaxed">
                                 Cada refeição é elaborada com produtos orgânicos de origem local, colhidos no auge da frescura para maximizar o sabor e os nutrientes.
                             </p>
@@ -320,7 +328,7 @@ export default function PratoSmart() {
                             <div className="w-12 h-12 bg-[#fde8e8] rounded-xl flex items-center justify-center mx-auto mb-4">
                                 <Heart size={24} color="#e05c5c" weight="duotone" />
                             </div>
-                            <h3 className="text-sm font-bold text-[#1a1a1a] mb-2">Nutriçã Personalizada</h3>
+                            <h3 className="text-sm font-bold text-[#1a1a1a] mb-2">Nutrição Personalizada</h3>
                             <p className="text-xs text-[#7a8a72] leading-relaxed">
                                 Nosso algoritmo com inteligência artificial analisa seu IMC, seus objetivos e suas preferências para criar planos alimentares personalizados para o seu corpo.
                             </p>

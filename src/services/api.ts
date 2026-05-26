@@ -42,6 +42,7 @@ async function http<T>(
 export const Objetivo = {
   EMAGRECIMENTO: "emagrecimento",
   GANHO_MASSA:   "ganho-massa",
+  VEGETARIANO:   "vegetariano",
   DIABETICO:     "diabetico",
   SEM_LACTOSE:   "sem-lactose",
   SEM_GLUTEN:    "sem-gluten",

@@ -9,7 +9,8 @@ export type Objetivo =
   | 'ganho-massa'
   | 'diabetico'
   | 'sem-lactose'
-  | 'sem-gluten';
+  | 'sem-gluten'
+    'vegetariano';
 
 export interface Product {
   foto: string | null;

@@ -44,7 +44,7 @@ const Products: React.FC = () => {
         produtoApi.findAll(),
         categoriaApi.findAll(),
       ]);
-      setProducts(productsRes);
+      setProducts(productsRes as unknown as Product[]);
       setCategories(categoriesRes);
     } catch {
       toast.error('Erro ao carregar produtos e categorias.');
@@ -119,20 +119,16 @@ const Products: React.FC = () => {
       };
 
       if (editingProduct) {
-        const response = await produtoApi.update({
-          id: editingProduct.id,
-          ...payload,
-        } as ProdutoPayload);
-
+        const response = await produtoApi.update({ id: editingProduct.id, ...payload } as ProdutoPayload);
         setProducts((prev) =>
           prev.map((product) =>
-            product.id === editingProduct.id ? response : product
+            product.id === editingProduct.id ? (response as unknown as Product) : product
           )
         );
         toast.success('Produto atualizado com sucesso!');
       } else {
         const response = await produtoApi.create(payload as ProdutoPayload);
-        setProducts((prev) => [...prev, response]);
+        setProducts((prev) => [...prev, response as unknown as Product]);
         toast.success('Produto criado com sucesso!');
       }
 
