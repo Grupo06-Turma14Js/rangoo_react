@@ -183,6 +183,10 @@ const Products: React.FC = () => {
   const usuario = session.getUsuario() as { tipo?: string } | null;
   const isAdmin = usuario != null && 'tipo' in usuario && usuario.tipo === 'admin';
 
+  console.log('USUARIO:', usuario);
+  console.log('TIPO:', usuario?.tipo);
+  console.log('IS ADMIN:', isAdmin);
+
   return (
     <div className="min-h-screen bg-[#F5F5F0] font-lato">
       {/* Header */}
