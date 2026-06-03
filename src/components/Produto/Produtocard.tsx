@@ -21,12 +21,16 @@ const ProductCard: React.FC<ProductCardProps> = ({
   const { addToCart } = useCart();
 
   const usuario = session.getUsuario();
-  const isAdmin = usuario != null && 'tipo' in usuario && usuario.tipo === 'admin';
+  const isAdmin = usuario != null && (usuario as any).tipo === 'admin';
 
   const formattedPrice = new Intl.NumberFormat('pt-BR', {
     style: 'currency',
     currency: 'BRL',
   }).format(product.preco);
+
+  console.log(usuario);
+  console.log((usuario as any)?.tipo);
+
 
   return (
     <div className="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 border border-gray-100 hover:-translate-y-1 flex flex-col">
