@@ -24,8 +24,8 @@ const Products: React.FC = () => {
   const [searchParams] = useSearchParams();
   const [search, setSearch] = useState('');
   const [activeCategoryFilter, setActiveCategoryFilter] = useState<string>(
-  searchParams.get("categoria") ?? "all"
-);
+    searchParams.get("categoria") ?? "all"
+  );
   const [sortOption, setSortOption] = useState<SortOption>('name');
 
   const [productModalOpen, setProductModalOpen] = useState(false);
@@ -206,22 +206,25 @@ const Products: React.FC = () => {
               Explore nosso cardápio completo de refeições nutritivas, elaboradas por chefs e
               nutricionistas para seu bem-estar.
             </p>
-            <div className="flex flex-wrap gap-4">
-              <button
-                onClick={handleOpenCreate}
-                className="flex items-center gap-2 px-6 py-3 rounded-full bg-white text-black text-sm font-bold shadow-sm hover:scale-105 transition-transform duration-300"
-              >
-                <Plus size={16} weight="bold" />
-                Novo Produto
-              </button>
-              <button
-                onClick={() => setCategoryModalOpen(true)}
-                className="flex items-center gap-2 px-6 py-3 rounded-full bg-transparent border border-white text-white text-sm font-bold hover:bg-white/10 hover:scale-105 transition-transform duration-300"
-              >
-                <Plus size={16} weight="bold" />
-                Categoria
-              </button>
-            </div>
+            {isAdmin && (
+              <div className="flex flex-wrap gap-4">
+                <button
+                  onClick={handleOpenCreate}
+                  className="flex items-center gap-2 px-6 py-3 rounded-full bg-white text-black text-sm font-bold shadow-sm hover:scale-105 transition-transform duration-300"
+                >
+                  <Plus size={16} weight="bold" />
+                  Novo Produto
+                </button>
+
+                <button
+                  onClick={() => setCategoryModalOpen(true)}
+                  className="flex items-center gap-2 px-6 py-3 rounded-full bg-transparent border border-white text-white text-sm font-bold hover:bg-white/10 hover:scale-105 transition-transform duration-300"
+                >
+                  <Plus size={16} weight="bold" />
+                  Categoria
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -232,11 +235,10 @@ const Products: React.FC = () => {
         <div className="flex flex-wrap gap-2">
           <button
             onClick={() => setActiveCategoryFilter('all')}
-            className={`px-4 py-2 rounded-full text-sm font-semibold ${
-              activeCategoryFilter === 'all'
+            className={`px-4 py-2 rounded-full text-sm font-semibold ${activeCategoryFilter === 'all'
                 ? 'bg-[#31502A] text-white'
                 : 'bg-white border border-gray-200 text-gray-600'
-            }`}
+              }`}
           >
             Tudo
           </button>
@@ -244,11 +246,10 @@ const Products: React.FC = () => {
             <button
               key={cat.id}
               onClick={() => setActiveCategoryFilter(String(cat.id))}
-              className={`px-4 py-2 rounded-full text-sm font-semibold ${
-                activeCategoryFilter === String(cat.id)
+              className={`px-4 py-2 rounded-full text-sm font-semibold ${activeCategoryFilter === String(cat.id)
                   ? 'bg-[#31502A] text-white'
                   : 'bg-white border border-gray-200 text-gray-600'
-              }`}
+                }`}
             >
               {cat.nome}
             </button>

@@ -5,6 +5,7 @@ import {
 } from '@phosphor-icons/react';
 import type { Product } from '../../types';
 import { useCart } from '../CartContext';
+import { session } from '../../services/api';
 
 interface ProductCardProps {
   product: Product;
@@ -17,8 +18,10 @@ const ProductCard: React.FC<ProductCardProps> = ({
   onEdit,
   onDelete,
 }) => {
-  // ✅ CORREÇÃO 1: O Hook do carrinho dentro do componente
   const { addToCart } = useCart();
+
+  const usuario = session.getUsuario();
+  const isAdmin = usuario != null && 'tipo' in usuario && usuario.tipo === 'admin';
 
   const formattedPrice = new Intl.NumberFormat('pt-BR', {
     style: 'currency',
@@ -28,12 +31,11 @@ const ProductCard: React.FC<ProductCardProps> = ({
   return (
     <div className="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 border border-gray-100 hover:-translate-y-1 flex flex-col">
       <div className="relative h-44 bg-linear-to-br from-[#31502A]/10 to-[#31502A]/5 flex items-center justify-center">
-        
-        {/* ✅ CORREÇÃO 2: Lógica da Foto vs Emoji */}
+
         {product.foto ? (
-          <img 
-            src={product.foto} 
-            alt={`Foto de ${product.nome}`} 
+          <img
+            src={product.foto}
+            alt={`Foto de ${product.nome}`}
             className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
           />
         ) : (
@@ -50,21 +52,23 @@ const ProductCard: React.FC<ProductCardProps> = ({
           </span>
         )}
 
-        <div className="absolute bottom-3 right-3 flex gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-          <button
-            onClick={() => onEdit(product)}
-            className="p-2 rounded-full bg-white shadow-md text-[#31502A] hover:bg-[#31502A] hover:text-white transition-colors"
-          >
-            <PencilSimple size={14} weight="bold" />
-          </button>
+        {isAdmin && (
+          <div className="absolute bottom-3 right-3 flex gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+            <button
+              onClick={() => onEdit(product)}
+              className="p-2 rounded-full bg-white shadow-md text-[#31502A] hover:bg-[#31502A] hover:text-white transition-colors"
+            >
+              <PencilSimple size={14} weight="bold" />
+            </button>
 
-          <button
-            onClick={() => onDelete(product)}
-            className="p-2 rounded-full bg-white shadow-md text-red-400 hover:bg-red-500 hover:text-white transition-colors"
-          >
-            <Trash size={14} weight="bold" />
-          </button>
-        </div>
+            <button
+              onClick={() => onDelete(product)}
+              className="p-2 rounded-full bg-white shadow-md text-red-400 hover:bg-red-500 hover:text-white transition-colors"
+            >
+              <Trash size={14} weight="bold" />
+            </button>
+          </div>
+        )}
       </div>
 
       <div className="p-4 flex flex-col flex-1">
@@ -89,7 +93,10 @@ const ProductCard: React.FC<ProductCardProps> = ({
             {formattedPrice}
           </span>
 
-          <button onClick={() => addToCart(product)} className="px-4 py-1.5 rounded-xl bg-[#31502A] text-white text-xs font-bold hover:bg-[#3d6434] hover:scale-105 transition-all active:scale-95">
+          <button
+            onClick={() => addToCart(product)}
+            className="px-4 py-1.5 rounded-xl bg-[#31502A] text-white text-xs font-bold hover:bg-[#3d6434] hover:scale-105 transition-all active:scale-95"
+          >
             Pedir Agora
           </button>
         </div>
